@@ -28,16 +28,16 @@
         <div class="card mb-3" style="background:linear-gradient(135deg,#E65100,#F57C00)">
             <div class="card-body text-white">
                 <div class="small opacity-75 mb-1">Outstanding Balance</div>
-                <div class="display-6 fw-bold">${{ number_format($loan->outstanding_amount,2) }}</div>
+                <div class="display-6 fw-bold">₹{{ number_format($loan->outstanding_amount,2) }}</div>
                 <hr class="border-white opacity-25">
                 <div class="d-flex justify-content-between small">
-                    <span>Principal: ${{ number_format($loan->principal_amount,2) }}</span>
+                    <span>Principal: ₹{{ number_format($loan->principal_amount,2) }}</span>
                 </div>
                 <div class="d-flex justify-content-between small">
-                    <span>Monthly EMI: ${{ number_format($loan->monthly_emi,2) }}</span>
+                    <span>Monthly EMI: ₹{{ number_format($loan->monthly_emi,2) }}</span>
                 </div>
                 <div class="d-flex justify-content-between small">
-                    <span>Total Paid: ${{ number_format($loan->paid_amount,2) }}</span>
+                    <span>Total Paid: ₹{{ number_format($loan->paid_amount,2) }}</span>
                 </div>
             </div>
         </div>
@@ -59,7 +59,7 @@
                         <input type="number" name="amount" class="form-control" value="{{ $loan->monthly_emi }}" min="1" step="0.01" required>
                         <button class="btn btn-primary">Pay</button>
                     </div>
-                    <div class="form-text">Recommended EMI: ${{ number_format($loan->monthly_emi,2) }}</div>
+                    <div class="form-text">Recommended EMI: ₹{{ number_format($loan->monthly_emi,2) }}</div>
                 </form>
             </div>
         </div>
@@ -79,10 +79,10 @@
                 @foreach($schedule as $row)
                 <tr class="{{ $row['month'] <= $loan->paidInstallments() ? 'table-success' : '' }}">
                     <td>{{ $row['month'] }}</td>
-                    <td>${{ number_format($row['emi'],2) }}</td>
-                    <td>${{ number_format($row['principal'],2) }}</td>
-                    <td>${{ number_format($row['interest'],2) }}</td>
-                    <td>${{ number_format($row['outstanding'],2) }}</td>
+                    <td>₹{{ number_format($row['emi'],2) }}</td>
+                    <td>₹{{ number_format($row['principal'],2) }}</td>
+                    <td>₹{{ number_format($row['interest'],2) }}</td>
+                    <td>₹{{ number_format($row['outstanding'],2) }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -104,10 +104,10 @@
                 <tr>
                     <td>{{ $pay->payment_number }}</td>
                     <td><code class="small">{{ $pay->reference_number }}</code></td>
-                    <td class="fw-semibold">${{ number_format($pay->amount,2) }}</td>
-                    <td>${{ number_format($pay->principal_component,2) }}</td>
-                    <td>${{ number_format($pay->interest_component,2) }}</td>
-                    <td>${{ number_format($pay->outstanding_after,2) }}</td>
+                    <td class="fw-semibold">₹{{ number_format($pay->amount,2) }}</td>
+                    <td>₹{{ number_format($pay->principal_component,2) }}</td>
+                    <td>₹{{ number_format($pay->interest_component,2) }}</td>
+                    <td>₹{{ number_format($pay->outstanding_after,2) }}</td>
                     <td class="text-muted small">{{ $pay->payment_date->format('M d, Y') }}</td>
                 </tr>
                 @endforeach

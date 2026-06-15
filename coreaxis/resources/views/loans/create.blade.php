@@ -67,12 +67,12 @@
     <div class="card-body">
         <div class="text-center mb-3">
             <div class="text-muted small">Monthly EMI</div>
-            <div class="display-5 fw-bold text-primary" id="emiDisplay">$0.00</div>
+            <div class="display-5 fw-bold text-primary" id="emiDisplay">₹0.00</div>
         </div>
         <hr>
-        <div class="d-flex justify-content-between mb-2"><span class="text-muted">Principal</span><span id="principalDisplay">$0.00</span></div>
-        <div class="d-flex justify-content-between mb-2"><span class="text-muted">Total Interest</span><span id="interestDisplay" class="text-warning">$0.00</span></div>
-        <div class="d-flex justify-content-between fw-bold"><span>Total Payable</span><span id="totalDisplay" class="text-danger">$0.00</span></div>
+        <div class="d-flex justify-content-between mb-2"><span class="text-muted">Principal</span><span id="principalDisplay">₹0.00</span></div>
+        <div class="d-flex justify-content-between mb-2"><span class="text-muted">Total Interest</span><span id="interestDisplay" class="text-warning">₹0.00</span></div>
+        <div class="d-flex justify-content-between fw-bold"><span>Total Payable</span><span id="totalDisplay" class="text-danger">₹0.00</span></div>
     </div>
 </div>
 </div>

@@ -28,7 +28,7 @@
         <div class="card border-success">
             <div class="card-body text-center">
                 <div class="text-muted small">Total Credits</div>
-                <div class="fs-3 fw-bold text-success">${{ number_format($totals['deposits'],2) }}</div>
+                <div class="fs-3 fw-bold text-success">₹{{ number_format($totals['deposits'],2) }}</div>
             </div>
         </div>
     </div>
@@ -36,7 +36,7 @@
         <div class="card border-danger">
             <div class="card-body text-center">
                 <div class="text-muted small">Total Debits</div>
-                <div class="fs-3 fw-bold text-danger">${{ number_format($totals['withdrawals'],2) }}</div>
+                <div class="fs-3 fw-bold text-danger">₹{{ number_format($totals['withdrawals'],2) }}</div>
             </div>
         </div>
     </div>
@@ -56,7 +56,7 @@
                         <td>{{ $txn->account->account_number }}</td>
                         <td><span class="badge bg-{{ $txn->getTypeBadge() }}">{{ $txn->getTypeLabel() }}</span></td>
                         <td class="{{ in_array($txn->transaction_type,['deposit','transfer_in'])?'text-success':'text-danger' }} fw-semibold">
-                            {{ in_array($txn->transaction_type,['deposit','transfer_in'])?'+':'-' }}${{ number_format($txn->amount,2) }}
+                            {{ in_array($txn->transaction_type,['deposit','transfer_in'])?'+':'-' }}₹{{ number_format($txn->amount,2) }}
                         </td>
                         <td class="text-muted small">{{ $txn->created_at->format('M d, Y H:i') }}</td>
                     </tr>

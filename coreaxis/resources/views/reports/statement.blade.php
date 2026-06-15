@@ -26,7 +26,7 @@
 <div class="card mb-3">
     <div class="card-header bg-primary text-white d-flex justify-content-between">
         <span><strong>{{ $account->account_number }}</strong> — {{ $account->user->name }}</span>
-        <span>Balance: ${{ number_format($account->balance,2) }}</span>
+        <span>Balance: ₹{{ number_format($account->balance,2) }}</span>
     </div>
     <div class="card-body p-0">
         <div class="table-responsive">
@@ -42,7 +42,7 @@
                         <td class="small">{{ $txn->description }}</td>
                         <td class="text-danger">{{ in_array($txn->transaction_type,['withdrawal','transfer_out']) ? '$'.number_format($txn->amount,2) : '' }}</td>
                         <td class="text-success">{{ in_array($txn->transaction_type,['deposit','transfer_in']) ? '$'.number_format($txn->amount,2) : '' }}</td>
-                        <td class="fw-semibold">${{ number_format($txn->balance_after,2) }}</td>
+                        <td class="fw-semibold">₹{{ number_format($txn->balance_after,2) }}</td>
                     </tr>
                     @empty
                     <tr><td colspan="6" class="text-center py-4 text-muted">No transactions for selected period</td></tr>

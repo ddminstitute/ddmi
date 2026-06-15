@@ -15,15 +15,15 @@
     <div class="card-body">
         <div class="text-center mb-4">
             <div class="display-4 fw-bold {{ in_array($transaction->transaction_type,['deposit','transfer_in'])?'text-success':'text-danger' }}">
-                {{ in_array($transaction->transaction_type,['deposit','transfer_in'])?'+':'-' }}${{ number_format($transaction->amount,2) }}
+                {{ in_array($transaction->transaction_type,['deposit','transfer_in'])?'+':'-' }}₹{{ number_format($transaction->amount,2) }}
             </div>
             <div class="text-muted">{{ $transaction->getTypeLabel() }}</div>
         </div>
         <table class="table table-borderless">
             <tr><td class="text-muted">Account</td><td class="fw-semibold">{{ $transaction->account->account_number }}</td></tr>
             <tr><td class="text-muted">Customer</td><td>{{ $transaction->account->user->name }}</td></tr>
-            <tr><td class="text-muted">Balance Before</td><td>${{ number_format($transaction->balance_before,2) }}</td></tr>
-            <tr><td class="text-muted">Balance After</td><td class="fw-semibold">${{ number_format($transaction->balance_after,2) }}</td></tr>
+            <tr><td class="text-muted">Balance Before</td><td>₹{{ number_format($transaction->balance_before,2) }}</td></tr>
+            <tr><td class="text-muted">Balance After</td><td class="fw-semibold">₹{{ number_format($transaction->balance_after,2) }}</td></tr>
             @if($transaction->relatedAccount)
             <tr><td class="text-muted">{{ in_array($transaction->transaction_type,['transfer_in'])?'From':'To' }} Account</td><td>{{ $transaction->relatedAccount->account_number }}</td></tr>
             @endif

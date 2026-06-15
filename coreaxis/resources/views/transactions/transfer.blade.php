@@ -18,7 +18,7 @@
                     <option value="">Source account...</option>
                     @foreach($accounts as $acc)
                     <option value="{{ $acc->id }}" data-balance="{{ $acc->balance }}" {{ old('from_account_id')==$acc->id?'selected':'' }}>
-                        {{ $acc->account_number }} — {{ $acc->user->name }} (${{ number_format($acc->balance,2) }})
+                        {{ $acc->account_number }} — {{ $acc->user->name }} (₹{{ number_format($acc->balance,2) }})
                     </option>
                     @endforeach
                 </select>

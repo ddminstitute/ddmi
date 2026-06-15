@@ -26,7 +26,7 @@
         <div class="card h-100" style="background:linear-gradient(135deg,#1565C0,#1976D2)">
             <div class="card-body text-white d-flex flex-column justify-content-center align-items-center py-4">
                 <div class="opacity-75 small mb-2">Current Balance</div>
-                <div class="display-5 fw-bold">${{ number_format($account->balance,2) }}</div>
+                <div class="display-5 fw-bold">₹{{ number_format($account->balance,2) }}</div>
                 <div class="opacity-75 mt-1">{{ $account->currency }}</div>
                 <div class="d-flex gap-2 mt-3">
                     <a href="{{ route('transactions.deposit') }}?account_id={{ $account->id }}" class="btn btn-sm btn-light">Deposit</a>
@@ -52,9 +52,9 @@
                         <td><code class="small">{{ $txn->reference_number }}</code></td>
                         <td><span class="badge bg-{{ $txn->getTypeBadge() }}">{{ $txn->getTypeLabel() }}</span></td>
                         <td class="fw-semibold {{ in_array($txn->transaction_type,['deposit','transfer_in'])?'text-success':'text-danger' }}">
-                            {{ in_array($txn->transaction_type,['deposit','transfer_in'])?'+':'-' }}${{ number_format($txn->amount,2) }}
+                            {{ in_array($txn->transaction_type,['deposit','transfer_in'])?'+':'-' }}₹{{ number_format($txn->amount,2) }}
                         </td>
-                        <td>${{ number_format($txn->balance_after,2) }}</td>
+                        <td>₹{{ number_format($txn->balance_after,2) }}</td>
                         <td class="text-muted small">{{ $txn->description }}</td>
                         <td class="text-muted small">{{ $txn->created_at->format('M d, Y H:i') }}</td>
                     </tr>

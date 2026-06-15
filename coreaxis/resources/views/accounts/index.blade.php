@@ -44,7 +44,7 @@
                         <td><code>{{ $acc->account_number }}</code></td>
                         <td>{{ $acc->user->name }}<div class="text-muted" style="font-size:.75rem">{{ $acc->user->email }}</div></td>
                         <td>{{ $acc->getTypeLabel() }}</td>
-                        <td class="fw-semibold text-success">${{ number_format($acc->balance,2) }}</td>
+                        <td class="fw-semibold text-success">₹{{ number_format($acc->balance,2) }}</td>
                         <td>{{ $acc->currency }}</td>
                         <td><span class="badge bg-{{ $acc->status==='active'?'success':($acc->status==='frozen'?'warning text-dark':'secondary') }}">{{ ucfirst($acc->status) }}</span></td>
                         <td class="text-muted small">{{ $acc->created_at->format('M d, Y') }}</td>

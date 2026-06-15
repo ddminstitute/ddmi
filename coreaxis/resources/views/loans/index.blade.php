@@ -44,9 +44,9 @@
                         <td><code>{{ $loan->loan_number }}</code></td>
                         <td>{{ $loan->user->name }}</td>
                         <td>{{ $loan->getTypeLabel() }}</td>
-                        <td>${{ number_format($loan->principal_amount,2) }}</td>
-                        <td>${{ number_format($loan->monthly_emi,2) }}</td>
-                        <td class="{{ $loan->status==='active'?'text-danger fw-semibold':'' }}">${{ number_format($loan->outstanding_amount,2) }}</td>
+                        <td>₹{{ number_format($loan->principal_amount,2) }}</td>
+                        <td>₹{{ number_format($loan->monthly_emi,2) }}</td>
+                        <td class="{{ $loan->status==='active'?'text-danger fw-semibold':'' }}">₹{{ number_format($loan->outstanding_amount,2) }}</td>
                         <td><span class="badge bg-{{ $loan->getStatusBadge() }}">{{ ucfirst($loan->status) }}</span></td>
                         <td class="text-muted small">{{ $loan->created_at->format('M d, Y') }}</td>
                         <td>

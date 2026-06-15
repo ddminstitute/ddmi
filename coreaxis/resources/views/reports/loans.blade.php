@@ -6,10 +6,10 @@
     <h5 class="mb-0 fw-bold">Loan Portfolio Report</h5>
 </div>
 <div class="row g-3 mb-4">
-    <div class="col-md-3"><div class="card border-primary"><div class="card-body text-center"><div class="text-muted small">Total Applied</div><div class="fs-4 fw-bold text-primary">${{ number_format($summary['total_principal'],2) }}</div></div></div></div>
-    <div class="col-md-3"><div class="card border-success"><div class="card-body text-center"><div class="text-muted small">Disbursed</div><div class="fs-4 fw-bold text-success">${{ number_format($summary['total_disbursed'],2) }}</div></div></div></div>
-    <div class="col-md-3"><div class="card border-danger"><div class="card-body text-center"><div class="text-muted small">Outstanding</div><div class="fs-4 fw-bold text-danger">${{ number_format($summary['total_outstanding'],2) }}</div></div></div></div>
-    <div class="col-md-3"><div class="card border-warning"><div class="card-body text-center"><div class="text-muted small">Collected</div><div class="fs-4 fw-bold text-warning">${{ number_format($summary['total_collected'],2) }}</div></div></div></div>
+    <div class="col-md-3"><div class="card border-primary"><div class="card-body text-center"><div class="text-muted small">Total Applied</div><div class="fs-4 fw-bold text-primary">₹{{ number_format($summary['total_principal'],2) }}</div></div></div></div>
+    <div class="col-md-3"><div class="card border-success"><div class="card-body text-center"><div class="text-muted small">Disbursed</div><div class="fs-4 fw-bold text-success">₹{{ number_format($summary['total_disbursed'],2) }}</div></div></div></div>
+    <div class="col-md-3"><div class="card border-danger"><div class="card-body text-center"><div class="text-muted small">Outstanding</div><div class="fs-4 fw-bold text-danger">₹{{ number_format($summary['total_outstanding'],2) }}</div></div></div></div>
+    <div class="col-md-3"><div class="card border-warning"><div class="card-body text-center"><div class="text-muted small">Collected</div><div class="fs-4 fw-bold text-warning">₹{{ number_format($summary['total_collected'],2) }}</div></div></div></div>
 </div>
 <div class="card mb-3">
     <div class="card-body py-2">
@@ -33,10 +33,10 @@
                         <td><a href="{{ route('loans.show',$loan) }}"><code>{{ $loan->loan_number }}</code></a></td>
                         <td>{{ $loan->user->name }}</td>
                         <td>{{ $loan->getTypeLabel() }}</td>
-                        <td>${{ number_format($loan->principal_amount,2) }}</td>
+                        <td>₹{{ number_format($loan->principal_amount,2) }}</td>
                         <td>{{ $loan->interest_rate }}%</td>
-                        <td>${{ number_format($loan->monthly_emi,2) }}</td>
-                        <td>${{ number_format($loan->outstanding_amount,2) }}</td>
+                        <td>₹{{ number_format($loan->monthly_emi,2) }}</td>
+                        <td>₹{{ number_format($loan->outstanding_amount,2) }}</td>
                         <td><span class="badge bg-{{ $loan->getStatusBadge() }}">{{ ucfirst($loan->status) }}</span></td>
                     </tr>
                     @empty

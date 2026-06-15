@@ -50,9 +50,9 @@
                         <td>{{ $txn->account->user->name }}</td>
                         <td><span class="badge bg-{{ $txn->getTypeBadge() }}">{{ $txn->getTypeLabel() }}</span></td>
                         <td class="fw-semibold {{ in_array($txn->transaction_type,['deposit','transfer_in'])?'text-success':'text-danger' }}">
-                            {{ in_array($txn->transaction_type,['deposit','transfer_in'])?'+':'-' }}${{ number_format($txn->amount,2) }}
+                            {{ in_array($txn->transaction_type,['deposit','transfer_in'])?'+':'-' }}₹{{ number_format($txn->amount,2) }}
                         </td>
-                        <td>${{ number_format($txn->balance_after,2) }}</td>
+                        <td>₹{{ number_format($txn->balance_after,2) }}</td>
                         <td class="text-muted small">{{ $txn->created_at->format('M d, Y H:i') }}</td>
                         <td><a href="{{ route('transactions.show',$txn) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a></td>
                     </tr>
