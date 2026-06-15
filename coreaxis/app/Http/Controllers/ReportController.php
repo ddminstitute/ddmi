@@ -16,15 +16,15 @@ class ReportController extends Controller
 
     public function transactions(Request $request)
     {
-        $query = Transaction::with('account.user');
-        if ($request->from_date) $query->whereDate('created_at', '>=', $request->from_date);
-        if ($request->to_date) $query->whereDate('created_at', '<=', $request->to_date);
-        if ($request->type) $query->where('transaction_type', $request->type);
+        $base = Transaction::with('account.user');
+        if ($request->from_date) $base->whereDate('created_at', '>=', $request->from_date);
+        if ($request->to_date) $base->whereDate('created_at', '<=', $request->to_date);
+        if ($request->type) $base->where('transaction_type', $request->type);
 
-        $transactions = $query->latest()->paginate(50)->withQueryString();
+        $transactions = (clone $base)->latest()->paginate(50)->withQueryString();
         $totals = [
-            'deposits' => $query->clone()->whereIn('transaction_type', ['deposit', 'transfer_in'])->sum('amount'),
-            'withdrawals' => $query->clone()->whereIn('transaction_type', ['withdrawal', 'transfer_out'])->sum('amount'),
+            'deposits' => (clone $base)->whereIn('transaction_type', ['deposit', 'transfer_in'])->sum('amount'),
+            'withdrawals' => (clone $base)->whereIn('transaction_type', ['withdrawal', 'transfer_out'])->sum('amount'),
         ];
         return view('reports.transactions', compact('transactions', 'totals'));
     }

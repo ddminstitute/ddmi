@@ -67,7 +67,7 @@ class AccountController extends Controller
     public function show(Account $account)
     {
         $account->load('user');
-        $transactions = $account->transactions()->paginate(20);
+        $transactions = $account->transactions()->paginate(20)->withQueryString();
         return view('accounts.show', compact('account', 'transactions'));
     }
 
