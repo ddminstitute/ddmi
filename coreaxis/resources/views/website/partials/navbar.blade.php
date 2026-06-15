@@ -7,8 +7,8 @@
                 <span class="d-block text-white opacity-75" style="font-size:.65rem;letter-spacing:1.5px;margin-top:-4px">FINANCIAL</span>
             </div>
         </a>
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-            <i class="bi bi-list text-white fs-4"></i>
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list text-white fs-3"></i>
         </button>
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav mx-auto gap-1">

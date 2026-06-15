@@ -133,6 +133,33 @@
         @keyframes pulse-ring { 0%{transform:scale(.9);opacity:.7} 100%{transform:scale(1.3);opacity:0} }
         .float-anim { animation:float 5s ease-in-out infinite }
         .float-anim-2 { animation:float 7s ease-in-out infinite 2s }
+
+        /* Mobile responsive */
+        @media(max-width:991px){
+            #navMenu { background:rgba(10,22,40,.97);border-radius:12px;margin-top:.5rem;padding:1rem;border:1px solid rgba(255,255,255,.08) }
+            .navbar-nav .nav-link { padding:.6rem 1rem!important }
+            .d-flex.gap-2.mt-3 { justify-content:center }
+        }
+        @media(max-width:767px){
+            .hero-section { min-height:auto;padding-bottom:3rem }
+            .hero-title { font-size:clamp(1.8rem,7vw,2.8rem) }
+            .hero-subtitle { font-size:.95rem }
+            .hero-stats { gap:1.2rem }
+            .hero-stat-num { font-size:1.4rem }
+            .float-anim { animation:none }
+            .balance-display { font-size:1.6rem }
+            .section-title { font-size:clamp(1.4rem,5vw,2rem) }
+            .plan-price { font-size:2rem }
+            .step-connector { display:none!important }
+            .cta-section h2 { font-size:clamp(1.5rem,6vw,2.2rem) }
+        }
+        @media(max-width:575px){
+            .feature-card { padding:1.25rem }
+            .plan-card { padding:1.25rem }
+            .testimonial-card { padding:1.25rem }
+            .hero-card { padding:1rem }
+            section[style*="padding:5rem"] { padding:3rem 0!important }
+        }
     </style>
     @stack('styles')
 </head>
