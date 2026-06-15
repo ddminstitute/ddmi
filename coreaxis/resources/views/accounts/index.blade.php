@@ -50,6 +50,7 @@
                         <td class="text-muted small">{{ $acc->created_at->format('M d, Y') }}</td>
                         <td>
                             <a href="{{ route('accounts.show',$acc) }}" class="btn btn-sm btn-outline-primary me-1"><i class="bi bi-eye"></i></a>
+                            <a href="{{ route('print.passbook',$acc) }}" target="_blank" class="btn btn-sm btn-outline-secondary me-1" title="Passbook"><i class="bi bi-book"></i></a>
                             <a href="{{ route('accounts.edit',$acc) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-pencil"></i></a>
                         </td>
                     </tr>

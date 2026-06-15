@@ -54,7 +54,10 @@
                         </td>
                         <td>₹{{ number_format($txn->balance_after,2) }}</td>
                         <td class="text-muted small">{{ $txn->created_at->format('M d, Y H:i') }}</td>
-                        <td><a href="{{ route('transactions.show',$txn) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a></td>
+                        <td class="d-flex gap-1">
+                            <a href="{{ route('transactions.show',$txn) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-eye"></i></a>
+                            <a href="{{ route('print.receipt',$txn) }}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-printer"></i></a>
+                        </td>
                     </tr>
                     @empty
                     <tr><td colspan="8" class="text-center text-muted py-5">No transactions found</td></tr>

@@ -6,6 +6,7 @@
 <div class="d-flex align-items-center mb-3 gap-2">
     <a href="{{ route('transactions.index') }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
     <h5 class="mb-0 fw-bold">Transaction Receipt</h5>
+    <a href="{{ route('print.receipt',$transaction) }}" target="_blank" class="btn btn-sm btn-outline-primary ms-auto"><i class="bi bi-printer me-1"></i>Print Receipt</a>
 </div>
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center">

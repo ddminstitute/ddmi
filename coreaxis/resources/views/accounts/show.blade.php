@@ -4,7 +4,11 @@
 <div class="d-flex align-items-center mb-3 gap-2">
     <a href="{{ route('accounts.index') }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
     <h5 class="mb-0 fw-bold">Account — {{ $account->account_number }}</h5>
-    <a href="{{ route('accounts.edit',$account) }}" class="btn btn-sm btn-outline-primary ms-auto"><i class="bi bi-pencil me-1"></i>Edit</a>
+    <div class="ms-auto d-flex gap-2">
+        <a href="{{ route('print.passbook',$account) }}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-book me-1"></i>Passbook</a>
+        <a href="{{ route('print.statement',$account) }}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-text me-1"></i>Statement</a>
+        <a href="{{ route('accounts.edit',$account) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil me-1"></i>Edit</a>
+    </div>
 </div>
 <div class="row g-3 mb-4">
     <div class="col-md-8">
@@ -44,7 +48,7 @@
         <div class="table-responsive">
             <table class="table table-hover mb-0">
                 <thead class="table-light">
-                    <tr><th>Reference</th><th>Type</th><th>Amount</th><th>Balance After</th><th>Description</th><th>Date</th></tr>
+                    <tr><th>Reference</th><th>Type</th><th>Amount</th><th>Balance After</th><th>Description</th><th>Date</th><th></th></tr>
                 </thead>
                 <tbody>
                     @forelse($transactions as $txn)
@@ -57,6 +61,7 @@
                         <td>₹{{ number_format($txn->balance_after,2) }}</td>
                         <td class="text-muted small">{{ $txn->description }}</td>
                         <td class="text-muted small">{{ $txn->created_at->format('M d, Y H:i') }}</td>
+                        <td><a href="{{ route('print.receipt',$txn) }}" target="_blank" class="btn btn-xs btn-outline-secondary" style="font-size:.72rem;padding:.2rem .5rem"><i class="bi bi-printer"></i></a></td>
                     </tr>
                     @empty
                     <tr><td colspan="6" class="text-center text-muted py-5">No transactions yet</td></tr>

@@ -5,6 +5,7 @@
     <a href="{{ route('loans.index') }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
     <h5 class="mb-0 fw-bold">Loan — {{ $loan->loan_number }}</h5>
     <span class="badge bg-{{ $loan->getStatusBadge() }} ms-2">{{ ucfirst($loan->status) }}</span>
+    <a href="{{ route('print.loan.certificate',$loan) }}" target="_blank" class="btn btn-sm btn-outline-secondary ms-auto"><i class="bi bi-printer me-1"></i>Print Certificate</a>
 </div>
 <div class="row g-3 mb-4">
     <div class="col-md-8">
