@@ -238,10 +238,6 @@
         </div>
         @endif
 
-        <a href="{{ route('profile.edit') }}" class="direct-lnk {{ request()->routeIs('profile.*') ? 'active' : '' }}">
-            <i class="bi bi-person-circle"></i><span class="sb-label">My Profile</span>
-        </a>
-
         @if(auth()->user()?->isSuperAdmin())
         <div class="nav-sec" style="color:#FFD700;border-color:rgba(255,215,0,.3)">Super Admin</div>
         <a href="{{ route('super-admin.dashboard') }}" class="direct-lnk {{ request()->routeIs('super-admin.dashboard') ? 'active' : '' }}">
@@ -262,13 +258,26 @@
             <span class="fw-600" style="font-size:.875rem;font-weight:600;color:#374151">@yield('title','Dashboard')</span>
         </div>
         <div class="d-flex align-items-center gap-2">
-            <span class="text-muted user-name-text" style="font-size:.8rem"><i class="bi bi-person-circle me-1"></i>{{ auth()->user()->name }}</span>
-            <form method="POST" action="{{ route('logout') }}" class="mb-0">
-                @csrf
-                <button type="submit" class="btn btn-sm btn-outline-secondary" style="font-size:.78rem;border-radius:8px;padding:.28rem .65rem">
-                    <i class="bi bi-box-arrow-right"></i><span class="d-none d-sm-inline ms-1">Logout</span>
+            <div class="dropdown">
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle d-flex align-items-center gap-1" type="button" data-bs-toggle="dropdown" style="font-size:.8rem;border-radius:8px">
+                    <i class="bi bi-person-circle"></i>
+                    <span class="user-name-text">{{ auth()->user()->name }}</span>
+                    <span class="badge bg-{{ auth()->user()->isSuperAdmin() ? 'warning text-dark' : (auth()->user()->isAdmin() ? 'primary' : 'secondary') }} ms-1" style="font-size:.6rem">{{ ucfirst(str_replace('_',' ', auth()->user()->role ?? 'user')) }}</span>
                 </button>
-            </form>
+                <ul class="dropdown-menu dropdown-menu-end shadow" style="min-width:180px;border-radius:12px;border:1px solid #e5e7eb">
+                    <li><a class="dropdown-item" href="{{ route('profile.edit') }}"><i class="bi bi-person-circle me-2 text-primary"></i>My Profile</a></li>
+                    @if(auth()->user()->isSuperAdmin())
+                    <li><a class="dropdown-item" href="{{ route('super-admin.dashboard') }}"><i class="bi bi-shield-lock-fill me-2" style="color:#FFD700"></i>Super Admin</a></li>
+                    @endif
+                    <li><hr class="dropdown-divider my-1"></li>
+                    <li>
+                        <form method="POST" action="{{ route('logout') }}" class="mb-0">
+                            @csrf
+                            <button type="submit" class="dropdown-item text-danger"><i class="bi bi-box-arrow-right me-2"></i>Logout</button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
     <div class="page-content">

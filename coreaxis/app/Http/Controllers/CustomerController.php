@@ -54,7 +54,8 @@ class CustomerController extends Controller {
         return redirect()->route('customers.show', $customer)->with('success', "Customer {$customer->customer_id} created successfully.");
     }
     public function show(Customer $customer) {
-        $customer->load(['accounts','loans']);
+        $customer->load('accounts');
+        try { $customer->load('loans'); } catch (\Exception $e) {}
         return view('customers.show', compact('customer'));
     }
     public function edit(Customer $customer) { return view('customers.edit', compact('customer')); }
