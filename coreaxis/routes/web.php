@@ -82,7 +82,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::middleware('super_admin')->prefix('super-admin')->name('super-admin.')->group(function () {
+    Route::prefix('super-admin')->name('super-admin.')->group(function () {
         Route::get('dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
         Route::get('permissions', [SuperAdminController::class, 'permissions'])->name('permissions');
         Route::post('permissions', [SuperAdminController::class, 'updatePermissions'])->name('permissions.update');
