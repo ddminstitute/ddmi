@@ -36,7 +36,7 @@
             </div>
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-semibold">Principal Amount ($) <span class="text-danger">*</span></label>
+                    <label class="form-label fw-semibold">Principal Amount (₹) <span class="text-danger">*</span></label>
                     <input type="number" name="principal_amount" id="principal" class="form-control" value="{{ old('principal_amount') }}" min="100" step="0.01" required oninput="calcEmi()">
                 </div>
                 <div class="col-md-6">
@@ -90,10 +90,10 @@ function calcEmi(){
     else if(p){ emi = p/n; }
     const total = emi * n;
     const interest = total - p;
-    document.getElementById('emiDisplay').textContent = '$'+emi.toFixed(2);
-    document.getElementById('principalDisplay').textContent = '$'+p.toFixed(2);
-    document.getElementById('interestDisplay').textContent = '$'+interest.toFixed(2);
-    document.getElementById('totalDisplay').textContent = '$'+total.toFixed(2);
+    document.getElementById('emiDisplay').textContent = '₹'+emi.toFixed(2);
+    document.getElementById('principalDisplay').textContent = '₹'+p.toFixed(2);
+    document.getElementById('interestDisplay').textContent = '₹'+interest.toFixed(2);
+    document.getElementById('totalDisplay').textContent = '₹'+total.toFixed(2);
 }
 calcEmi();
 </script>

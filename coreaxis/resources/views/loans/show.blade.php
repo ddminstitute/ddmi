@@ -56,7 +56,7 @@
                 <form method="POST" action="{{ route('loans.payment',$loan) }}">
                     @csrf
                     <div class="input-group">
-                        <span class="input-group-text">$</span>
+                        <span class="input-group-text">₹</span>
                         <input type="number" name="amount" class="form-control" value="{{ $loan->monthly_emi }}" min="1" step="0.01" required>
                         <button class="btn btn-primary">Pay</button>
                     </div>

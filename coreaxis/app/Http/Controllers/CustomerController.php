@@ -65,33 +65,35 @@ class CustomerController extends Controller {
     public function edit(Customer $customer) { return view('customers.edit', compact('customer')); }
     public function update(Request $request, Customer $customer) {
         $data = $request->validate([
-            'name'=>'required|string|max:100',
-            'father_name'=>'nullable|string|max:100',
-            'mother_name'=>'nullable|string|max:100',
-            'gender'=>'required|in:male,female,other',
-            'date_of_birth'=>'required|date',
-            'phone'=>'required|string|max:15',
-            'alternate_phone'=>'nullable|string|max:15',
-            'email'=>'nullable|email',
-            'address'=>'required|string',
-            'city'=>'required|string|max:50',
-            'state'=>'required|string|max:50',
-            'pincode'=>'required|string|max:10',
-            'pan_number'=>'nullable|string|max:20',
-            'aadhaar_number'=>'nullable|string|max:20',
-            'occupation'=>'nullable|string|max:100',
-            'annual_income'=>'nullable|numeric|min:0',
-            'status'=>'required|in:active,inactive,blacklisted',
-            'notes'=>'nullable|string|max:500',
-            'photo'=>'nullable|image|max:2048',
-            'signature'=>'nullable|image|max:1024',
-            'pan_document'=>'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'aadhaar_document'=>'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'name'             => 'required|string|max:100',
+            'father_name'      => 'nullable|string|max:100',
+            'mother_name'      => 'nullable|string|max:100',
+            'gender'           => 'required|in:male,female,other',
+            'date_of_birth'    => 'nullable|date',
+            'phone'            => 'required|string|max:15',
+            'alternate_phone'  => 'nullable|string|max:15',
+            'email'            => 'nullable|email|max:100',
+            'address'          => 'nullable|string',
+            'city'             => 'nullable|string|max:50',
+            'state'            => 'nullable|string|max:50',
+            'pincode'          => 'nullable|string|max:10',
+            'pan_number'       => 'nullable|string|max:20',
+            'aadhaar_number'   => 'nullable|string|max:20',
+            'occupation'       => 'nullable|string|max:100',
+            'annual_income'    => 'nullable|numeric|min:0',
+            'status'           => 'required|in:active,inactive,blacklisted',
+            'notes'            => 'nullable|string',
+            'photo'            => 'nullable|image|max:2048',
+            'signature'        => 'nullable|image|max:1024',
+            'pan_document'     => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
+            'aadhaar_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
         ]);
         foreach (['photo','signature','pan_document','aadhaar_document'] as $field) {
             if ($request->hasFile($field)) {
                 if ($customer->$field) Storage::disk('public')->delete($customer->$field);
                 $data[$field] = $request->file($field)->store('customers','public');
+            } else {
+                unset($data[$field]); // don't overwrite existing file if not uploaded
             }
         }
         $customer->update($data);

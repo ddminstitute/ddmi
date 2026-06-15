@@ -34,17 +34,17 @@
             </div>
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                    <label class="form-label fw-semibold">Initial Deposit ($) <span class="text-danger">*</span></label>
-                    <input type="number" name="initial_deposit" class="form-control @error('initial_deposit') is-invalid @enderror" value="{{ old('initial_deposit',0) }}" min="0" step="0.01" required>
-                    @error('initial_deposit')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                    <label class="form-label fw-semibold">Initial Deposit (₹) <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text">₹</span>
+                        <input type="number" name="initial_deposit" class="form-control @error('initial_deposit') is-invalid @enderror" value="{{ old('initial_deposit',0) }}" min="0" step="0.01" required>
+                    </div>
+                    @error('initial_deposit')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                 </div>
                 <div class="col-md-6">
                     <label class="form-label fw-semibold">Currency <span class="text-danger">*</span></label>
                     <select name="currency" class="form-select">
-                        <option value="USD" {{ old('currency','USD')=='USD'?'selected':'' }}>USD — US Dollar</option>
-                        <option value="EUR" {{ old('currency')=='EUR'?'selected':'' }}>EUR — Euro</option>
-                        <option value="GBP" {{ old('currency')=='GBP'?'selected':'' }}>GBP — British Pound</option>
-                        <option value="PKR" {{ old('currency')=='PKR'?'selected':'' }}>PKR — Pakistani Rupee</option>
+                        <option value="INR" selected>INR — Indian Rupee (₹)</option>
                     </select>
                 </div>
             </div>

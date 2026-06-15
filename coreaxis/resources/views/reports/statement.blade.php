@@ -40,8 +40,8 @@
                         <td class="small">{{ $txn->created_at->format('M d, Y') }}</td>
                         <td><code class="small">{{ $txn->reference_number }}</code></td>
                         <td class="small">{{ $txn->description }}</td>
-                        <td class="text-danger">{{ in_array($txn->transaction_type,['withdrawal','transfer_out']) ? '$'.number_format($txn->amount,2) : '' }}</td>
-                        <td class="text-success">{{ in_array($txn->transaction_type,['deposit','transfer_in']) ? '$'.number_format($txn->amount,2) : '' }}</td>
+                        <td class="text-danger">{{ in_array($txn->transaction_type,['withdrawal','transfer_out']) ? '₹'.number_format($txn->amount,2) : '' }}</td>
+                        <td class="text-success">{{ in_array($txn->transaction_type,['deposit','transfer_in']) ? '₹'.number_format($txn->amount,2) : '' }}</td>
                         <td class="fw-semibold">₹{{ number_format($txn->balance_after,2) }}</td>
                     </tr>
                     @empty

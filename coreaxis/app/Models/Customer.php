@@ -18,9 +18,9 @@ class Customer extends Model {
     public function accounts() { return $this->hasMany(Account::class); }
     public function loans() {
         if (!\Illuminate\Support\Facades\Schema::hasColumn('loans', 'customer_id')) {
-            return $this->hasMany(Loan::class)->whereRaw('0=1');
+            return $this->hasMany(Loan::class, 'id', 'id')->whereRaw('0=1');
         }
-        return $this->hasMany(Loan::class);
+        return $this->hasMany(Loan::class, 'customer_id', 'id');
     }
     public function collectionPlans() { return $this->hasMany(CollectionPlan::class); }
     public function getStatusBadge(): string {

@@ -39,9 +39,9 @@
                 @error('to_account_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
             <div class="mb-3">
-                <label class="form-label fw-semibold">Amount ($) <span class="text-danger">*</span></label>
+                <label class="form-label fw-semibold">Amount (₹) <span class="text-danger">*</span></label>
                 <div class="input-group">
-                    <span class="input-group-text">$</span>
+                    <span class="input-group-text">₹</span>
                     <input type="number" name="amount" class="form-control @error('amount') is-invalid @enderror" value="{{ old('amount') }}" min="1" step="0.01" placeholder="0.00" required>
                     @error('amount')<div class="invalid-feedback">{{ $message }}</div>@enderror
                 </div>
@@ -61,7 +61,7 @@
 function updateBalance(sel){
     const opt = sel.options[sel.selectedIndex];
     const bal = opt.dataset.balance;
-    document.getElementById('balanceInfo').textContent = bal ? 'Available: $' + parseFloat(bal).toFixed(2) : '';
+    document.getElementById('balanceInfo').textContent = bal ? 'Available: ₹' + parseFloat(bal).toFixed(2) : '';
 }
 </script>
 @endpush
