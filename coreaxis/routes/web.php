@@ -6,9 +6,16 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn() => redirect()->route('dashboard'));
+// Public Website Routes
+Route::get('/', [WebsiteController::class, 'home'])->name('home');
+Route::get('/about', [WebsiteController::class, 'about'])->name('about');
+Route::get('/services', [WebsiteController::class, 'services'])->name('services');
+Route::get('/account-plans', [WebsiteController::class, 'accountPlans'])->name('account.plans');
+Route::get('/contact', [WebsiteController::class, 'contact'])->name('contact');
+Route::post('/contact', [WebsiteController::class, 'sendContact'])->name('contact.send');
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
