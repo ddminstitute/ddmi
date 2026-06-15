@@ -64,9 +64,9 @@
                         <td>{{ $emi->installment_number }}</td>
                         <td>{{ \Carbon\Carbon::parse($emi->due_date)->format('d M Y') }}</td>
                         <td class="text-end fw-semibold">{{ number_format($emi->emi_amount,2) }}</td>
-                        <td class="text-end">{{ number_format($emi->principal_amount,2) }}</td>
-                        <td class="text-end text-warning">{{ number_format($emi->interest_amount,2) }}</td>
-                        <td class="text-end">{{ number_format($emi->balance_after,2) }}</td>
+                        <td class="text-end">{{ number_format($emi->principal_component,2) }}</td>
+                        <td class="text-end text-warning">{{ number_format($emi->interest_component,2) }}</td>
+                        <td class="text-end">{{ number_format($emi->outstanding_balance,2) }}</td>
                         <td>
                             @if($emi->status==='paid')
                                 <span class="badge bg-success">Paid</span>
@@ -96,8 +96,8 @@
                     <tr>
                         <td colspan="2">Total</td>
                         <td class="text-end">₹{{ number_format($emiSchedules->sum('emi_amount'),2) }}</td>
-                        <td class="text-end">₹{{ number_format($emiSchedules->sum('principal_amount'),2) }}</td>
-                        <td class="text-end text-warning">₹{{ number_format($emiSchedules->sum('interest_amount'),2) }}</td>
+                        <td class="text-end">₹{{ number_format($emiSchedules->sum('principal_component'),2) }}</td>
+                        <td class="text-end text-warning">₹{{ number_format($emiSchedules->sum('interest_component'),2) }}</td>
                         <td colspan="4"></td>
                     </tr>
                 </tfoot>

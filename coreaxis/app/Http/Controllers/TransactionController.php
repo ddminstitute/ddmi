@@ -62,7 +62,7 @@ class TransactionController extends Controller
         });
 
         return redirect()->route('transactions.index')
-            ->with('success', "Deposit of \${$data['amount']} completed successfully.");
+            ->with('success', "Deposit of ₹{$data['amount']} completed successfully.");
     }
 
     public function withdrawForm()
@@ -103,7 +103,7 @@ class TransactionController extends Controller
         });
 
         return redirect()->route('transactions.index')
-            ->with('success', "Withdrawal of \${$data['amount']} completed successfully.");
+            ->with('success', "Withdrawal of ₹{$data['amount']} completed successfully.");
     }
 
     public function transferForm()
@@ -163,6 +163,6 @@ class TransactionController extends Controller
         });
 
         return redirect()->route('transactions.index')
-            ->with('success', "Transfer of \${$data['amount']} completed successfully.");
+            ->with('success', "Transfer of ₹{$data['amount']} completed successfully.");
     }
 }

@@ -10,10 +10,9 @@
         <div class="info-row"><span class="info-label">Department:</span><span>{{ $payslip->employee->department }}</span></div>
     </div>
     <div class="col-md-6 text-md-end">
-        <div class="info-row justify-content-md-end"><span class="info-label">Pay Period:</span><span class="fw-bold">{{ $payslip->getMonthName() }}</span></div>
-        <div class="info-row justify-content-md-end"><span class="info-label">Payment Date:</span><span>{{ $payslip->paid_date ? \Carbon\Carbon::parse($payslip->paid_date)->format('d M Y') : '—' }}</span></div>
-        <div class="info-row justify-content-md-end"><span class="info-label">Payment Mode:</span><span class="text-capitalize">{{ str_replace('_',' ',$payslip->payment_mode ?? 'bank_transfer') }}</span></div>
-        <div class="info-row justify-content-md-end"><span class="info-label">Days Present:</span><span>{{ $payslip->days_present }} / {{ $payslip->working_days }}</span></div>
+        <div class="info-row justify-content-md-end"><span class="info-label">Pay Period:</span><span class="fw-bold">{{ $payslip->getMonthName() }} {{ $payslip->year }}</span></div>
+        <div class="info-row justify-content-md-end"><span class="info-label">Status:</span><span class="badge bg-{{ $payslip->status==='paid'?'success':'warning' }}">{{ ucfirst($payslip->status) }}</span></div>
+        <div class="info-row justify-content-md-end"><span class="info-label">Days Present:</span><span>{{ $payslip->present_days }} / {{ $payslip->working_days }}</span></div>
     </div>
 </div>
 <hr>
@@ -23,19 +22,17 @@
         <table class="table table-sm table-bordered">
             <tr><td>Basic Salary</td><td class="text-end">₹{{ number_format($payslip->basic_salary,2) }}</td></tr>
             @if($payslip->hra)<tr><td>HRA</td><td class="text-end">₹{{ number_format($payslip->hra,2) }}</td></tr>@endif
-            @if($payslip->allowances)<tr><td>Other Allowances</td><td class="text-end">₹{{ number_format($payslip->allowances,2) }}</td></tr>@endif
-            @if($payslip->bonus)<tr><td>Bonus</td><td class="text-end text-success">₹{{ number_format($payslip->bonus,2) }}</td></tr>@endif
+            @if($payslip->other_allowance)<tr><td>Other Allowances</td><td class="text-end">₹{{ number_format($payslip->other_allowance,2) }}</td></tr>@endif
             <tr class="fw-bold table-success"><td>Gross Salary</td><td class="text-end">₹{{ number_format($payslip->gross_salary,2) }}</td></tr>
         </table>
     </div>
     <div class="col-md-6">
         <h6 class="fw-bold text-danger mb-2"><i class="bi bi-dash-circle me-1"></i>Deductions</h6>
         <table class="table table-sm table-bordered">
-            @if($payslip->pf_deduction)<tr><td>PF Deduction</td><td class="text-end text-danger">₹{{ number_format($payslip->pf_deduction,2) }}</td></tr>@endif
-            @if($payslip->tax_deduction)<tr><td>TDS / Tax</td><td class="text-end text-danger">₹{{ number_format($payslip->tax_deduction,2) }}</td></tr>@endif
-            @if($payslip->other_deductions)<tr><td>Other Deductions</td><td class="text-end text-danger">₹{{ number_format($payslip->other_deductions,2) }}</td></tr>@endif
-            @php $totalDed = ($payslip->pf_deduction??0)+($payslip->tax_deduction??0)+($payslip->other_deductions??0); @endphp
-            <tr class="fw-bold table-danger"><td>Total Deductions</td><td class="text-end">₹{{ number_format($totalDed,2) }}</td></tr>
+            @if($payslip->deductions)
+            <tr><td>Total Deductions</td><td class="text-end text-danger">₹{{ number_format($payslip->deductions,2) }}</td></tr>
+            @endif
+            <tr class="fw-bold table-danger"><td>Net Deductions</td><td class="text-end">₹{{ number_format($payslip->deductions??0,2) }}</td></tr>
         </table>
     </div>
 </div>

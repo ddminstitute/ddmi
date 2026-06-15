@@ -154,9 +154,9 @@ class LoanController extends Controller
                     'installment_number' => $i,
                     'due_date' => $disbursedAt->copy()->addMonths($i)->toDateString(),
                     'emi_amount' => $loan->emi_amount,
-                    'principal_amount' => $principal,
-                    'interest_amount' => $interest,
-                    'balance_after' => max(0, $outstanding),
+                    'principal_component' => $principal,
+                    'interest_component' => $interest,
+                    'outstanding_balance' => max(0, $outstanding),
                     'status' => 'pending',
                 ]);
             }

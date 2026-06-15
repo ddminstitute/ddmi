@@ -44,8 +44,8 @@
             <td>{{ $emi->installment_number }}</td>
             <td>{{ \Carbon\Carbon::parse($emi->due_date)->format('d M Y') }}</td>
             <td class="text-end">{{ number_format($emi->emi_amount,2) }}</td>
-            <td class="text-end">{{ number_format($emi->principal_amount,2) }}</td>
-            <td class="text-end">{{ number_format($emi->interest_amount,2) }}</td>
+            <td class="text-end">{{ number_format($emi->principal_component,2) }}</td>
+            <td class="text-end">{{ number_format($emi->interest_component,2) }}</td>
             <td><span class="badge bg-{{ $emi->status==='paid'?'success':($emi->status==='overdue'?'danger':'secondary') }}">{{ ucfirst($emi->status) }}</span></td>
         </tr>
         @endforeach
