@@ -55,7 +55,11 @@ class CustomerController extends Controller {
     }
     public function show(Customer $customer) {
         $customer->load('accounts');
-        try { $customer->load('loans'); } catch (\Exception $e) {}
+        try {
+            $customer->load('loans');
+        } catch (\Exception $e) {
+            $customer->setRelation('loans', collect());
+        }
         return view('customers.show', compact('customer'));
     }
     public function edit(Customer $customer) { return view('customers.edit', compact('customer')); }

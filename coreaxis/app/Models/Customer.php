@@ -16,7 +16,12 @@ class Customer extends Model {
         return 'CUST' . str_pad($count, 4, '0', STR_PAD_LEFT);
     }
     public function accounts() { return $this->hasMany(Account::class); }
-    public function loans() { return $this->hasMany(Loan::class); }
+    public function loans() {
+        if (!\Illuminate\Support\Facades\Schema::hasColumn('loans', 'customer_id')) {
+            return $this->hasMany(Loan::class)->whereRaw('0=1');
+        }
+        return $this->hasMany(Loan::class);
+    }
     public function collectionPlans() { return $this->hasMany(CollectionPlan::class); }
     public function getStatusBadge(): string {
         return match($this->status) { 'active'=>'success','inactive'=>'secondary','blacklisted'=>'danger', default=>'secondary' };
