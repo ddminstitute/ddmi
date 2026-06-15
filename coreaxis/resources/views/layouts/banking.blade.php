@@ -62,6 +62,16 @@
         .direct-lnk:hover,.direct-lnk.active{background:rgba(255,255,255,.14);color:#fff;}
         .direct-lnk>i{width:17px;flex-shrink:0;font-size:.88rem;}
 
+        /* ── SECTION GROUP ── */
+        .sec-group-btn{width:100%;background:none;border:none;border-top:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.45);display:flex;align-items:center;justify-content:space-between;padding:.42rem .9rem;margin-top:.3rem;cursor:pointer;transition:all .2s;font-size:.7rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;}
+        .sec-group-btn:hover{color:rgba(255,255,255,.75);background:rgba(255,255,255,.04);}
+        .sec-group-btn.collapsed{color:rgba(255,255,255,.3);}
+        .sec-group-label{display:flex;align-items:center;gap:.3rem;}
+        .sec-chevron{font-size:.7rem;transition:transform .25s;flex-shrink:0;}
+        .sec-group-btn.collapsed .sec-chevron{transform:rotate(-90deg);}
+        .sec-group-body{overflow:hidden;transition:max-height .3s ease;}
+        .sec-group-body.sg-hidden{display:none;}
+
         /* ── MAIN ── */
         .main-content{margin-left:var(--sw);min-height:100vh;transition:margin-left .28s ease;}
         .topbar{background:#fff;padding:.6rem 1.2rem;box-shadow:0 2px 10px rgba(0,0,0,.06);position:sticky;top:0;z-index:99;display:flex;align-items:center;justify-content:space-between;}
@@ -112,140 +122,179 @@
         <div class="sb-icon"><i class="bi bi-bank2"></i></div>
         <div class="sb-brand-text"><h6>CoreAxis</h6><small>Financial Management</small></div>
     </div>
-    <nav class="py-2 pb-5">
+    <nav class="py-2 pb-3">
 
         <a href="{{ route('dashboard') }}" class="direct-lnk {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="bi bi-speedometer2"></i><span class="sb-label">Dashboard</span>
         </a>
 
+        {{-- CRM GROUP --}}
         @if(auth()->user()?->hasFeature('customers'))
-        <div class="nav-sec">CRM</div>
-        @php $custOpen = request()->routeIs('customers.*'); @endphp
-        <button class="sb-acc-btn {{ $custOpen ? 'open' : '' }}" onclick="toggleAcc('accCust',this)">
-            <i class="bi bi-people"></i><span class="sb-label">Customers</span><i class="bi bi-chevron-down"></i>
+        @php $crmActive = request()->routeIs('customers.*'); @endphp
+        <button class="sec-group-btn {{ $crmActive ? '' : '' }}" onclick="toggleGroup('grpCRM',this)" id="btnGrpCRM">
+            <span class="sec-group-label"><i class="bi bi-people-fill me-1"></i><span class="sb-label">CRM</span></span>
+            <i class="bi bi-chevron-down sec-chevron sb-label"></i>
         </button>
-        <div class="acc-children {{ $custOpen ? '' : 'd-none' }}" id="accCust">
-            <a href="{{ route('customers.index') }}" class="child-lnk {{ request()->routeIs('customers.index') ? 'active' : '' }}"><i class="bi bi-list-ul"></i><span class="sb-label">All Customers</span></a>
-            <a href="{{ route('customers.create') }}" class="child-lnk {{ request()->routeIs('customers.create') ? 'active' : '' }}"><i class="bi bi-person-plus"></i><span class="sb-label">Add Customer</span></a>
+        <div class="sec-group-body" id="grpCRM">
+            @php $custOpen = request()->routeIs('customers.*'); @endphp
+            <button class="sb-acc-btn {{ $custOpen ? 'open' : '' }}" onclick="toggleAcc('accCust',this)">
+                <i class="bi bi-people"></i><span class="sb-label">Customers</span><i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="acc-children {{ $custOpen ? '' : 'd-none' }}" id="accCust">
+                <a href="{{ route('customers.index') }}" class="child-lnk {{ request()->routeIs('customers.index') ? 'active' : '' }}"><i class="bi bi-list-ul"></i><span class="sb-label">All Customers</span></a>
+                <a href="{{ route('customers.create') }}" class="child-lnk {{ request()->routeIs('customers.create') ? 'active' : '' }}"><i class="bi bi-person-plus"></i><span class="sb-label">Add Customer</span></a>
+            </div>
         </div>
         @endif
 
+        {{-- BANKING GROUP --}}
         @if(auth()->user()?->hasFeature('accounts') || auth()->user()?->hasFeature('transactions') || auth()->user()?->hasFeature('loans'))
-        <div class="nav-sec">Banking</div>
-        @endif
-        @if(auth()->user()?->hasFeature('accounts'))
-        @php $accOpen = request()->routeIs('accounts.*'); @endphp
-        <button class="sb-acc-btn {{ $accOpen ? 'open' : '' }}" onclick="toggleAcc('accAcc',this)">
-            <i class="bi bi-wallet2"></i><span class="sb-label">Accounts</span><i class="bi bi-chevron-down"></i>
+        @php $bankingActive = request()->routeIs('accounts.*') || request()->routeIs('transactions.*') || request()->routeIs('loans.*'); @endphp
+        <button class="sec-group-btn" onclick="toggleGroup('grpBanking',this)" id="btnGrpBanking">
+            <span class="sec-group-label"><i class="bi bi-bank me-1"></i><span class="sb-label">Banking</span></span>
+            <i class="bi bi-chevron-down sec-chevron sb-label"></i>
         </button>
-        <div class="acc-children {{ $accOpen ? '' : 'd-none' }}" id="accAcc">
-            <a href="{{ route('accounts.index') }}" class="child-lnk {{ request()->routeIs('accounts.index') ? 'active' : '' }}"><i class="bi bi-list-ul"></i><span class="sb-label">All Accounts</span></a>
-            <a href="{{ route('accounts.create') }}" class="child-lnk {{ request()->routeIs('accounts.create') ? 'active' : '' }}"><i class="bi bi-plus-circle"></i><span class="sb-label">Open Account</span></a>
-        </div>
-        @endif
-        @if(auth()->user()?->hasFeature('transactions'))
-        @php $txnOpen = request()->routeIs('transactions.*'); @endphp
-        <button class="sb-acc-btn {{ $txnOpen ? 'open' : '' }}" onclick="toggleAcc('accTxn',this)">
-            <i class="bi bi-arrow-left-right"></i><span class="sb-label">Transactions</span><i class="bi bi-chevron-down"></i>
-        </button>
-        <div class="acc-children {{ $txnOpen ? '' : 'd-none' }}" id="accTxn">
-            <a href="{{ route('transactions.index') }}" class="child-lnk {{ request()->routeIs('transactions.index') ? 'active' : '' }}"><i class="bi bi-list-ul"></i><span class="sb-label">All Transactions</span></a>
-            <a href="{{ route('transactions.deposit') }}" class="child-lnk {{ request()->routeIs('transactions.deposit') ? 'active' : '' }}"><i class="bi bi-plus-circle-fill"></i><span class="sb-label">Deposit</span></a>
-            <a href="{{ route('transactions.withdraw') }}" class="child-lnk {{ request()->routeIs('transactions.withdraw') ? 'active' : '' }}"><i class="bi bi-dash-circle-fill"></i><span class="sb-label">Withdraw</span></a>
-            <a href="{{ route('transactions.transfer') }}" class="child-lnk {{ request()->routeIs('transactions.transfer') ? 'active' : '' }}"><i class="bi bi-send-fill"></i><span class="sb-label">Transfer</span></a>
-        </div>
-        @endif
-        @if(auth()->user()?->hasFeature('loans'))
-        @php $loanOpen = request()->routeIs('loans.*'); @endphp
-        <button class="sb-acc-btn {{ $loanOpen ? 'open' : '' }}" onclick="toggleAcc('accLoan',this)">
-            <i class="bi bi-credit-card"></i><span class="sb-label">Loans & EMI</span><i class="bi bi-chevron-down"></i>
-        </button>
-        <div class="acc-children {{ $loanOpen ? '' : 'd-none' }}" id="accLoan">
-            <a href="{{ route('loans.index') }}" class="child-lnk {{ request()->routeIs('loans.index') ? 'active' : '' }}"><i class="bi bi-list-ul"></i><span class="sb-label">All Loans</span></a>
-            <a href="{{ route('loans.create') }}" class="child-lnk {{ request()->routeIs('loans.create') ? 'active' : '' }}"><i class="bi bi-file-earmark-plus"></i><span class="sb-label">Apply Loan</span></a>
+        <div class="sec-group-body" id="grpBanking">
+            @if(auth()->user()?->hasFeature('accounts'))
+            @php $accOpen = request()->routeIs('accounts.*'); @endphp
+            <button class="sb-acc-btn {{ $accOpen ? 'open' : '' }}" onclick="toggleAcc('accAcc',this)">
+                <i class="bi bi-wallet2"></i><span class="sb-label">Accounts</span><i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="acc-children {{ $accOpen ? '' : 'd-none' }}" id="accAcc">
+                <a href="{{ route('accounts.index') }}" class="child-lnk {{ request()->routeIs('accounts.index') ? 'active' : '' }}"><i class="bi bi-list-ul"></i><span class="sb-label">All Accounts</span></a>
+                <a href="{{ route('accounts.create') }}" class="child-lnk {{ request()->routeIs('accounts.create') ? 'active' : '' }}"><i class="bi bi-plus-circle"></i><span class="sb-label">Open Account</span></a>
+            </div>
+            @endif
+            @if(auth()->user()?->hasFeature('transactions'))
+            @php $txnOpen = request()->routeIs('transactions.*'); @endphp
+            <button class="sb-acc-btn {{ $txnOpen ? 'open' : '' }}" onclick="toggleAcc('accTxn',this)">
+                <i class="bi bi-arrow-left-right"></i><span class="sb-label">Transactions</span><i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="acc-children {{ $txnOpen ? '' : 'd-none' }}" id="accTxn">
+                <a href="{{ route('transactions.index') }}" class="child-lnk {{ request()->routeIs('transactions.index') ? 'active' : '' }}"><i class="bi bi-list-ul"></i><span class="sb-label">All Transactions</span></a>
+                <a href="{{ route('transactions.deposit') }}" class="child-lnk {{ request()->routeIs('transactions.deposit') ? 'active' : '' }}"><i class="bi bi-plus-circle-fill"></i><span class="sb-label">Deposit</span></a>
+                <a href="{{ route('transactions.withdraw') }}" class="child-lnk {{ request()->routeIs('transactions.withdraw') ? 'active' : '' }}"><i class="bi bi-dash-circle-fill"></i><span class="sb-label">Withdraw</span></a>
+                <a href="{{ route('transactions.transfer') }}" class="child-lnk {{ request()->routeIs('transactions.transfer') ? 'active' : '' }}"><i class="bi bi-send-fill"></i><span class="sb-label">Transfer</span></a>
+            </div>
+            @endif
+            @if(auth()->user()?->hasFeature('loans'))
+            @php $loanOpen = request()->routeIs('loans.*'); @endphp
+            <button class="sb-acc-btn {{ $loanOpen ? 'open' : '' }}" onclick="toggleAcc('accLoan',this)">
+                <i class="bi bi-credit-card"></i><span class="sb-label">Loans & EMI</span><i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="acc-children {{ $loanOpen ? '' : 'd-none' }}" id="accLoan">
+                <a href="{{ route('loans.index') }}" class="child-lnk {{ request()->routeIs('loans.index') ? 'active' : '' }}"><i class="bi bi-list-ul"></i><span class="sb-label">All Loans</span></a>
+                <a href="{{ route('loans.create') }}" class="child-lnk {{ request()->routeIs('loans.create') ? 'active' : '' }}"><i class="bi bi-file-earmark-plus"></i><span class="sb-label">Apply Loan</span></a>
+            </div>
+            @endif
         </div>
         @endif
 
+        {{-- COLLECTIONS GROUP --}}
         @if(auth()->user()?->hasFeature('collections') || auth()->user()?->hasFeature('saving_plans'))
-        <div class="nav-sec">Collections</div>
-        @endif
-        @if(auth()->user()?->hasFeature('collections'))
-        @php $colOpen = request()->routeIs('collection-plans.*'); @endphp
-        <button class="sb-acc-btn {{ $colOpen ? 'open' : '' }}" onclick="toggleAcc('accCol',this)">
-            <i class="bi bi-collection"></i><span class="sb-label">Collections</span><i class="bi bi-chevron-down"></i>
+        @php $colActive = request()->routeIs('collection-plans.*') || request()->routeIs('saving-plans.*'); @endphp
+        <button class="sec-group-btn" onclick="toggleGroup('grpCollections',this)" id="btnGrpCollections">
+            <span class="sec-group-label"><i class="bi bi-collection-fill me-1"></i><span class="sb-label">Collections</span></span>
+            <i class="bi bi-chevron-down sec-chevron sb-label"></i>
         </button>
-        <div class="acc-children {{ $colOpen ? '' : 'd-none' }}" id="accCol">
-            <a href="{{ route('collection-plans.index') }}" class="child-lnk"><i class="bi bi-list-ul"></i><span class="sb-label">All Plans</span></a>
-            <a href="{{ route('collection-plans.create') }}" class="child-lnk"><i class="bi bi-plus-circle"></i><span class="sb-label">New Plan</span></a>
-        </div>
-        @endif
-        @if(auth()->user()?->hasFeature('saving_plans'))
-        @php $spOpen = request()->routeIs('saving-plans.*'); @endphp
-        <button class="sb-acc-btn {{ $spOpen ? 'open' : '' }}" onclick="toggleAcc('accSP',this)">
-            <i class="bi bi-piggy-bank"></i><span class="sb-label">Saving Plans</span><i class="bi bi-chevron-down"></i>
-        </button>
-        <div class="acc-children {{ $spOpen ? '' : 'd-none' }}" id="accSP">
-            <a href="{{ route('saving-plans.index') }}" class="child-lnk"><i class="bi bi-list-ul"></i><span class="sb-label">All Plans</span></a>
-            <a href="{{ route('saving-plans.create') }}" class="child-lnk"><i class="bi bi-plus-circle"></i><span class="sb-label">New Plan</span></a>
+        <div class="sec-group-body" id="grpCollections">
+            @if(auth()->user()?->hasFeature('collections'))
+            @php $colOpen = request()->routeIs('collection-plans.*'); @endphp
+            <button class="sb-acc-btn {{ $colOpen ? 'open' : '' }}" onclick="toggleAcc('accCol',this)">
+                <i class="bi bi-collection"></i><span class="sb-label">Collections</span><i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="acc-children {{ $colOpen ? '' : 'd-none' }}" id="accCol">
+                <a href="{{ route('collection-plans.index') }}" class="child-lnk"><i class="bi bi-list-ul"></i><span class="sb-label">All Plans</span></a>
+                <a href="{{ route('collection-plans.create') }}" class="child-lnk"><i class="bi bi-plus-circle"></i><span class="sb-label">New Plan</span></a>
+            </div>
+            @endif
+            @if(auth()->user()?->hasFeature('saving_plans'))
+            @php $spOpen = request()->routeIs('saving-plans.*'); @endphp
+            <button class="sb-acc-btn {{ $spOpen ? 'open' : '' }}" onclick="toggleAcc('accSP',this)">
+                <i class="bi bi-piggy-bank"></i><span class="sb-label">Saving Plans</span><i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="acc-children {{ $spOpen ? '' : 'd-none' }}" id="accSP">
+                <a href="{{ route('saving-plans.index') }}" class="child-lnk"><i class="bi bi-list-ul"></i><span class="sb-label">All Plans</span></a>
+                <a href="{{ route('saving-plans.create') }}" class="child-lnk"><i class="bi bi-plus-circle"></i><span class="sb-label">New Plan</span></a>
+            </div>
+            @endif
         </div>
         @endif
 
+        {{-- ANALYTICS GROUP --}}
         @if(auth()->user()?->hasFeature('reports'))
-        <div class="nav-sec">Analytics</div>
-        @php $repOpen = request()->routeIs('reports.*'); @endphp
-        <button class="sb-acc-btn {{ $repOpen ? 'open' : '' }}" onclick="toggleAcc('accRep',this)">
-            <i class="bi bi-bar-chart-line"></i><span class="sb-label">Reports</span><i class="bi bi-chevron-down"></i>
+        @php $repActive = request()->routeIs('reports.*'); @endphp
+        <button class="sec-group-btn" onclick="toggleGroup('grpAnalytics',this)" id="btnGrpAnalytics">
+            <span class="sec-group-label"><i class="bi bi-bar-chart-fill me-1"></i><span class="sb-label">Analytics</span></span>
+            <i class="bi bi-chevron-down sec-chevron sb-label"></i>
         </button>
-        <div class="acc-children {{ $repOpen ? '' : 'd-none' }}" id="accRep">
-            <a href="{{ route('reports.transactions') }}" class="child-lnk"><i class="bi bi-receipt"></i><span class="sb-label">Transactions</span></a>
-            <a href="{{ route('reports.statement') }}" class="child-lnk"><i class="bi bi-file-text"></i><span class="sb-label">Account Statement</span></a>
-            <a href="{{ route('reports.loans') }}" class="child-lnk"><i class="bi bi-graph-up"></i><span class="sb-label">Loan Report</span></a>
+        <div class="sec-group-body" id="grpAnalytics">
+            @php $repOpen = request()->routeIs('reports.*'); @endphp
+            <button class="sb-acc-btn {{ $repOpen ? 'open' : '' }}" onclick="toggleAcc('accRep',this)">
+                <i class="bi bi-bar-chart-line"></i><span class="sb-label">Reports</span><i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="acc-children {{ $repOpen ? '' : 'd-none' }}" id="accRep">
+                <a href="{{ route('reports.transactions') }}" class="child-lnk"><i class="bi bi-receipt"></i><span class="sb-label">Transactions</span></a>
+                <a href="{{ route('reports.statement') }}" class="child-lnk"><i class="bi bi-file-text"></i><span class="sb-label">Account Statement</span></a>
+                <a href="{{ route('reports.loans') }}" class="child-lnk"><i class="bi bi-graph-up"></i><span class="sb-label">Loan Report</span></a>
+            </div>
         </div>
         @endif
 
-        @if(auth()->user()?->hasFeature('employees') || auth()->user()?->hasFeature('expenses'))
-        <div class="nav-sec">HR & Admin</div>
-        @endif
-        @if(auth()->user()?->hasFeature('employees'))
-        @php $empOpen = request()->routeIs('employees.*'); @endphp
-        <button class="sb-acc-btn {{ $empOpen ? 'open' : '' }}" onclick="toggleAcc('accHR',this)">
-            <i class="bi bi-person-badge"></i><span class="sb-label">HR & Payroll</span><i class="bi bi-chevron-down"></i>
+        {{-- HR & ADMIN GROUP --}}
+        @if(auth()->user()?->hasFeature('employees') || auth()->user()?->hasFeature('expenses') || auth()->user()?->hasFeature('users'))
+        @php $hrActive = request()->routeIs('employees.*') || request()->routeIs('expenses.*') || request()->routeIs('users.*'); @endphp
+        <button class="sec-group-btn" onclick="toggleGroup('grpHR',this)" id="btnGrpHR">
+            <span class="sec-group-label"><i class="bi bi-person-workspace me-1"></i><span class="sb-label">HR & Admin</span></span>
+            <i class="bi bi-chevron-down sec-chevron sb-label"></i>
         </button>
-        <div class="acc-children {{ $empOpen ? '' : 'd-none' }}" id="accHR">
-            <a href="{{ route('employees.index') }}" class="child-lnk"><i class="bi bi-people"></i><span class="sb-label">Employees</span></a>
-            <a href="{{ route('employees.create') }}" class="child-lnk"><i class="bi bi-person-plus"></i><span class="sb-label">Add Employee</span></a>
-        </div>
-        @endif
-        @if(auth()->user()?->hasFeature('expenses'))
-        @php $expOpen = request()->routeIs('expenses.*'); @endphp
-        <button class="sb-acc-btn {{ $expOpen ? 'open' : '' }}" onclick="toggleAcc('accExp',this)">
-            <i class="bi bi-receipt-cutoff"></i><span class="sb-label">Expenses</span><i class="bi bi-chevron-down"></i>
-        </button>
-        <div class="acc-children {{ $expOpen ? '' : 'd-none' }}" id="accExp">
-            <a href="{{ route('expenses.index') }}" class="child-lnk"><i class="bi bi-list-ul"></i><span class="sb-label">All Expenses</span></a>
-            <a href="{{ route('expenses.create') }}" class="child-lnk"><i class="bi bi-plus-circle"></i><span class="sb-label">Add Expense</span></a>
+        <div class="sec-group-body" id="grpHR">
+            @if(auth()->user()?->hasFeature('employees'))
+            @php $empOpen = request()->routeIs('employees.*'); @endphp
+            <button class="sb-acc-btn {{ $empOpen ? 'open' : '' }}" onclick="toggleAcc('accHR',this)">
+                <i class="bi bi-person-badge"></i><span class="sb-label">HR & Payroll</span><i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="acc-children {{ $empOpen ? '' : 'd-none' }}" id="accHR">
+                <a href="{{ route('employees.index') }}" class="child-lnk"><i class="bi bi-people"></i><span class="sb-label">Employees</span></a>
+                <a href="{{ route('employees.create') }}" class="child-lnk"><i class="bi bi-person-plus"></i><span class="sb-label">Add Employee</span></a>
+            </div>
+            @endif
+            @if(auth()->user()?->hasFeature('expenses'))
+            @php $expOpen = request()->routeIs('expenses.*'); @endphp
+            <button class="sb-acc-btn {{ $expOpen ? 'open' : '' }}" onclick="toggleAcc('accExp',this)">
+                <i class="bi bi-receipt-cutoff"></i><span class="sb-label">Expenses</span><i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="acc-children {{ $expOpen ? '' : 'd-none' }}" id="accExp">
+                <a href="{{ route('expenses.index') }}" class="child-lnk"><i class="bi bi-list-ul"></i><span class="sb-label">All Expenses</span></a>
+                <a href="{{ route('expenses.create') }}" class="child-lnk"><i class="bi bi-plus-circle"></i><span class="sb-label">Add Expense</span></a>
+            </div>
+            @endif
+            @if(auth()->user()?->hasFeature('users'))
+            @php $usrOpen = request()->routeIs('users.*'); @endphp
+            <button class="sb-acc-btn {{ $usrOpen ? 'open' : '' }}" onclick="toggleAcc('accUsr',this)">
+                <i class="bi bi-gear"></i><span class="sb-label">Settings</span><i class="bi bi-chevron-down"></i>
+            </button>
+            <div class="acc-children {{ $usrOpen ? '' : 'd-none' }}" id="accUsr">
+                <a href="{{ route('users.index') }}" class="child-lnk"><i class="bi bi-shield-person"></i><span class="sb-label">User Management</span></a>
+            </div>
+            @endif
         </div>
         @endif
 
-        @if(auth()->user()?->hasFeature('users'))
-        <div class="nav-sec">Settings</div>
-        @php $usrOpen = request()->routeIs('users.*'); @endphp
-        <button class="sb-acc-btn {{ $usrOpen ? 'open' : '' }}" onclick="toggleAcc('accUsr',this)">
-            <i class="bi bi-gear"></i><span class="sb-label">Settings</span><i class="bi bi-chevron-down"></i>
-        </button>
-        <div class="acc-children {{ $usrOpen ? '' : 'd-none' }}" id="accUsr">
-            <a href="{{ route('users.index') }}" class="child-lnk"><i class="bi bi-shield-person"></i><span class="sb-label">User Management</span></a>
-        </div>
-        @endif
-
+        {{-- SUPER ADMIN GROUP --}}
         @if(auth()->user()?->isSuperAdmin())
-        <div class="nav-sec" style="color:#FFD700;border-color:rgba(255,215,0,.3)">Super Admin</div>
-        <a href="{{ route('super-admin.dashboard') }}" class="direct-lnk {{ request()->routeIs('super-admin.dashboard') ? 'active' : '' }}">
-            <i class="bi bi-shield-lock-fill" style="color:#FFD700"></i><span class="sb-label">SA Dashboard</span>
-        </a>
-        <a href="{{ route('super-admin.permissions') }}" class="direct-lnk {{ request()->routeIs('super-admin.permissions') ? 'active' : '' }}">
-            <i class="bi bi-toggles" style="color:#FFD700"></i><span class="sb-label">Permissions</span>
-        </a>
+        <button class="sec-group-btn" onclick="toggleGroup('grpSA',this)" id="btnGrpSA" style="color:#FFD700;border-color:rgba(255,215,0,.2)">
+            <span class="sec-group-label"><i class="bi bi-shield-fill-check me-1"></i><span class="sb-label">Super Admin</span></span>
+            <i class="bi bi-chevron-down sec-chevron sb-label"></i>
+        </button>
+        <div class="sec-group-body" id="grpSA">
+            <a href="{{ route('super-admin.dashboard') }}" class="direct-lnk {{ request()->routeIs('super-admin.dashboard') ? 'active' : '' }}">
+                <i class="bi bi-shield-lock-fill" style="color:#FFD700"></i><span class="sb-label">SA Dashboard</span>
+            </a>
+            <a href="{{ route('super-admin.permissions') }}" class="direct-lnk {{ request()->routeIs('super-admin.permissions') ? 'active' : '' }}">
+                <i class="bi bi-toggles" style="color:#FFD700"></i><span class="sb-label">Permissions</span>
+            </a>
+        </div>
         @endif
     </nav>
 </div>
@@ -311,6 +360,35 @@ function toggleAcc(id, btn) {
     el.classList.toggle('d-none', !hidden);
     btn.classList.toggle('open', hidden);
 }
+
+// Section group collapse/expand
+function toggleGroup(id, btn) {
+    const body = document.getElementById(id);
+    const collapsed = btn.classList.contains('collapsed');
+    body.classList.toggle('sg-hidden', !collapsed);
+    btn.classList.toggle('collapsed', !collapsed);
+    // save state
+    const states = JSON.parse(localStorage.getItem('sgStates') || '{}');
+    states[id] = !collapsed ? 'closed' : 'open';
+    localStorage.setItem('sgStates', JSON.stringify(states));
+}
+
+// Init section groups on load
+document.addEventListener('DOMContentLoaded', () => {
+    const states = JSON.parse(localStorage.getItem('sgStates') || '{}');
+    document.querySelectorAll('.sec-group-btn').forEach(btn => {
+        const bodyId = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+        const body = document.getElementById(bodyId);
+        if (!body) return;
+        const hasActive = body.querySelector('.active, .open') !== null;
+        const savedState = states[bodyId];
+        // Keep open if: has active item, or saved as open, or no saved state
+        if (!hasActive && savedState === 'closed') {
+            body.classList.add('sg-hidden');
+            btn.classList.add('collapsed');
+        }
+    });
+});
 
 const sbToggle = document.getElementById('sbToggle');
 const overlay  = document.getElementById('sbOverlay');
