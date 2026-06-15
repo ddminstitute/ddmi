@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Account;
+use App\Models\Customer;
+use App\Models\EmiSchedule;
 use App\Models\Loan;
 use App\Models\LoanPayment;
 use App\Models\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,8 +25,9 @@ class LoanController extends Controller
 
     public function create()
     {
-        $accounts = Account::where('status', 'active')->with('user')->get();
-        return view('loans.create', compact('accounts'));
+        $accounts = Account::where('status', 'active')->with('user','customer')->get();
+        $customers = Customer::where('status','active')->get();
+        return view('loans.create', compact('accounts','customers'));
     }
 
     public function store(Request $request)
@@ -43,13 +47,16 @@ class LoanController extends Controller
 
         Loan::create([
             'user_id' => $account->user_id,
+            'customer_id' => $account->customer_id,
             'account_id' => $data['account_id'],
             'loan_number' => Loan::generateLoanNumber(),
             'loan_type' => $data['loan_type'],
+            'amount' => $data['principal_amount'],
             'principal_amount' => $data['principal_amount'],
             'interest_rate' => $data['interest_rate'],
             'tenure_months' => $data['tenure_months'],
             'monthly_emi' => $emi,
+            'emi_amount' => $emi,
             'total_amount' => $total,
             'outstanding_amount' => $total,
             'purpose' => $data['purpose'],
@@ -62,9 +69,33 @@ class LoanController extends Controller
 
     public function show(Loan $loan)
     {
-        $loan->load('user', 'account', 'payments');
+        $loan->load('user', 'customer', 'account', 'payments', 'emiSchedules');
         $schedule = $this->generateSchedule($loan);
         return view('loans.show', compact('loan', 'schedule'));
+    }
+
+    public function emiSchedule(Loan $loan)
+    {
+        $emiSchedules = $loan->emiSchedules()->get();
+        return view('loans.emi-schedule', compact('loan', 'emiSchedules'));
+    }
+
+    public function payEmi(Loan $loan, EmiSchedule $emi)
+    {
+        if ($emi->status === 'paid') {
+            return back()->with('error', 'This EMI is already paid.');
+        }
+        DB::transaction(function () use ($loan, $emi) {
+            $emi->update(['status' => 'paid', 'paid_date' => now()->toDateString()]);
+            $paid = $loan->emiSchedules()->where('status','paid')->sum('emi_amount');
+            $outstanding = max(0, $loan->total_amount - $paid);
+            $loan->update([
+                'paid_amount' => $paid,
+                'outstanding_amount' => $outstanding,
+                'status' => $outstanding <= 0 ? 'closed' : 'active',
+            ]);
+        });
+        return back()->with('success', 'EMI #'.$emi->installment_number.' marked as paid.');
     }
 
     public function approve(Loan $loan)
@@ -110,6 +141,25 @@ class LoanController extends Controller
                 'status' => 'completed',
             ]);
             $loan->update(['status' => 'active', 'disbursed_at' => now()]);
+            // Generate EMI schedule
+            $outstanding = $loan->principal_amount;
+            $r = $loan->interest_rate / 12 / 100;
+            $disbursedAt = Carbon::now();
+            for ($i = 1; $i <= $loan->tenure_months; $i++) {
+                $interest = round($outstanding * $r, 2);
+                $principal = round($loan->emi_amount - $interest, 2);
+                $outstanding = round($outstanding - $principal, 2);
+                EmiSchedule::create([
+                    'loan_id' => $loan->id,
+                    'installment_number' => $i,
+                    'due_date' => $disbursedAt->copy()->addMonths($i)->toDateString(),
+                    'emi_amount' => $loan->emi_amount,
+                    'principal_amount' => $principal,
+                    'interest_amount' => $interest,
+                    'balance_after' => max(0, $outstanding),
+                    'status' => 'pending',
+                ]);
+            }
         });
 
         return back()->with('success', 'Loan disbursed successfully.');

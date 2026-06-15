@@ -40,10 +40,10 @@
             <div class="col-lg-4">
                 <h6 class="text-white fw-semibold mb-3">Contact Info</h6>
                 <ul class="list-unstyled">
-                    <li class="mb-2 d-flex gap-2"><i class="bi bi-geo-alt text-accent mt-1"></i><span class="footer-link">123 Financial District, New York, NY 10004</span></li>
-                    <li class="mb-2 d-flex gap-2"><i class="bi bi-telephone text-accent mt-1"></i><span class="footer-link">+1 (800) COREAXIS</span></li>
-                    <li class="mb-2 d-flex gap-2"><i class="bi bi-envelope text-accent mt-1"></i><span class="footer-link">support@coreaxis.com</span></li>
-                    <li class="mb-2 d-flex gap-2"><i class="bi bi-clock text-accent mt-1"></i><span class="footer-link">Mon–Fri: 9AM – 6PM EST</span></li>
+                    <li class="mb-2 d-flex gap-2"><i class="bi bi-geo-alt text-accent mt-1"></i><span class="footer-link">Samastipur, Bihar — 848101</span></li>
+                    <li class="mb-2 d-flex gap-2"><i class="bi bi-telephone text-accent mt-1"></i><span class="footer-link">+91 9113107586</span></li>
+                    <li class="mb-2 d-flex gap-2"><i class="bi bi-envelope text-accent mt-1"></i><span class="footer-link">support@coreaxis.cloud</span></li>
+                    <li class="mb-2 d-flex gap-2"><i class="bi bi-globe text-accent mt-1"></i><span class="footer-link">coreaxis.cloud</span></li>
                 </ul>
             </div>
         </div>

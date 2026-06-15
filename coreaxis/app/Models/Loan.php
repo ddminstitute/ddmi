@@ -7,9 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Loan extends Model
 {
     protected $fillable = [
-        'user_id', 'account_id', 'loan_number', 'loan_type', 'principal_amount',
-        'interest_rate', 'tenure_months', 'monthly_emi', 'total_amount',
-        'paid_amount', 'outstanding_amount', 'purpose', 'status',
+        'user_id', 'customer_id', 'account_id', 'loan_number', 'loan_type', 'amount',
+        'principal_amount', 'interest_rate', 'tenure_months', 'monthly_emi', 'emi_amount',
+        'total_amount', 'paid_amount', 'outstanding_amount', 'purpose', 'status',
         'approved_by', 'approved_at', 'disbursed_at',
     ];
 
@@ -25,8 +25,10 @@ class Loan extends Model
     ];
 
     public function user() { return $this->belongsTo(User::class); }
+    public function customer() { return $this->belongsTo(Customer::class); }
     public function account() { return $this->belongsTo(Account::class); }
     public function payments() { return $this->hasMany(LoanPayment::class)->latest(); }
+    public function emiSchedules() { return $this->hasMany(EmiSchedule::class)->orderBy('installment_number'); }
 
     public static function generateLoanNumber(): string
     {

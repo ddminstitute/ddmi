@@ -18,9 +18,9 @@
             <div class="d-flex justify-content-between align-items-start">
                 <div>
                     <div class="small opacity-75 mb-1">Total Balance</div>
-                    <div class="fs-3 fw-bold">${{ number_format($totalBalance,2) }}</div>
+                    <div class="fs-3 fw-bold">₹{{ number_format($totalBalance,2) }}</div>
                 </div>
-                <div class="stat-icon"><i class="bi bi-currency-dollar"></i></div>
+                <div class="stat-icon"><i class="bi bi-currency-rupee"></i></div>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
             <div class="d-flex justify-content-between align-items-start">
                 <div>
                     <div class="small opacity-75 mb-1">Monthly Deposits</div>
-                    <div class="fs-3 fw-bold">${{ number_format($monthlyDeposits,2) }}</div>
+                    <div class="fs-3 fw-bold">₹{{ number_format($monthlyDeposits,2) }}</div>
                 </div>
                 <div class="stat-icon"><i class="bi bi-graph-up-arrow"></i></div>
             </div>
@@ -91,7 +91,7 @@
                                 <td>{{ $txn->account->account_number }}</td>
                                 <td><span class="badge bg-{{ $txn->getTypeBadge() }}">{{ $txn->getTypeLabel() }}</span></td>
                                 <td class="fw-semibold {{ in_array($txn->transaction_type,['deposit','transfer_in']) ? 'text-success' : 'text-danger' }}">
-                                    {{ in_array($txn->transaction_type,['deposit','transfer_in']) ? '+' : '-' }}${{ number_format($txn->amount,2) }}
+                                    {{ in_array($txn->transaction_type,['deposit','transfer_in']) ? '+' : '-' }}₹{{ number_format($txn->amount,2) }}
                                 </td>
                                 <td class="text-muted small">{{ $txn->created_at->format('M d, Y H:i') }}</td>
                             </tr>
@@ -119,7 +119,7 @@
                             <div class="text-muted" style="font-size:.78rem">{{ $acc->user->name }} · {{ $acc->getTypeLabel() }}</div>
                         </div>
                         <div class="text-end">
-                            <div class="fw-bold small text-success">${{ number_format($acc->balance,2) }}</div>
+                            <div class="fw-bold small text-success">₹{{ number_format($acc->balance,2) }}</div>
                             <span class="badge bg-{{ $acc->status==='active' ? 'success' : 'secondary' }} mt-1" style="font-size:.65rem">{{ ucfirst($acc->status) }}</span>
                         </div>
                     </div>

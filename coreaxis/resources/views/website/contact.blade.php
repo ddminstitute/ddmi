@@ -14,7 +14,7 @@
         <div class="row g-5">
             <div class="col-lg-4">
                 <h4 class="fw-800 mb-4">Get in Touch</h4>
-                @foreach([['bi-telephone','Phone Support','+1 (800) COREAXIS','Mon–Fri, 9AM–6PM EST','#1565C0','rgba(21,101,192,.08)'],['bi-envelope','Email Us','support@coreaxis.com','24–48 hour response time','#00897B','rgba(0,137,123,.08)'],['bi-geo-alt','Visit Us','123 Financial District, New York, NY 10004','Mon–Fri, 9AM–5PM','#6A1B9A','rgba(106,27,154,.08)'],['bi-chat-dots','Live Chat','Available in the app','Usually responds in under 2 minutes','#E65100','rgba(230,81,0,.08)']] as $c)
+                @foreach([['bi-telephone','Phone Support','+91 9113107586','Mon–Sat, 9AM–6PM IST','#1565C0','rgba(21,101,192,.08)'],['bi-envelope','Email Us','support@coreaxis.cloud','24–48 hour response time','#00897B','rgba(0,137,123,.08)'],['bi-geo-alt','Visit Us','Samastipur, Bihar — 848101','Mon–Sat, 9AM–5PM','#6A1B9A','rgba(106,27,154,.08)'],['bi-globe','Website','coreaxis.cloud','Visit us online anytime','#E65100','rgba(230,81,0,.08)']] as $c)
                 <div class="d-flex gap-3 mb-4">
                     <div style="width:48px;height:48px;border-radius:12px;background:{{ $c[5] }};display:flex;align-items:center;justify-content:center;flex-shrink:0">
                         <i class="bi {{ $c[0] }}" style="color:{{ $c[4] }};font-size:1.2rem"></i>

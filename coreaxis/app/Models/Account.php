@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Account extends Model
 {
     protected $fillable = [
-        'user_id', 'account_number', 'account_type', 'balance',
+        'user_id', 'customer_id', 'account_number', 'account_type', 'balance',
         'currency', 'status', 'notes',
     ];
 
     protected $casts = ['balance' => 'decimal:2'];
 
     public function user() { return $this->belongsTo(User::class); }
+    public function customer() { return $this->belongsTo(Customer::class); }
     public function transactions() { return $this->hasMany(Transaction::class)->latest(); }
     public function loans() { return $this->hasMany(Loan::class); }
 
