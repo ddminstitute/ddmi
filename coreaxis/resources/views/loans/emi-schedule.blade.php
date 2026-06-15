@@ -5,7 +5,7 @@
     <h5 class="mb-0 fw-bold"><i class="bi bi-calendar3 me-2 text-primary"></i>EMI Schedule — {{ $loan->loan_number }}</h5>
     <div class="d-flex gap-2">
         <a href="{{ route('loans.show',$loan) }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Back</a>
-        <a href="{{ route('loans.certificate',$loan) }}" target="_blank" class="btn btn-outline-primary btn-sm"><i class="bi bi-printer me-1"></i>Print Certificate</a>
+        <a href="{{ route('print.loan.certificate',$loan) }}" target="_blank" class="btn btn-outline-primary btn-sm"><i class="bi bi-printer me-1"></i>Print Certificate</a>
     </div>
 </div>
 
