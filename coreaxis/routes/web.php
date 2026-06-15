@@ -14,6 +14,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\PrintController;
+use App\Http\Controllers\SuperAdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteController::class, 'home'])->name('home');
@@ -80,6 +81,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::middleware('super_admin')->prefix('super-admin')->name('super-admin.')->group(function () {
+        Route::get('dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
+        Route::get('permissions', [SuperAdminController::class, 'permissions'])->name('permissions');
+        Route::post('permissions', [SuperAdminController::class, 'updatePermissions'])->name('permissions.update');
+        Route::get('seed', [SuperAdminController::class, 'seedSuperAdmin'])->name('seed');
+    });
 });
 
 require __DIR__.'/auth.php';

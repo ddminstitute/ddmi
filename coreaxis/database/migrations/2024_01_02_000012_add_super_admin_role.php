@@ -4,8 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 return new class extends Migration {
     public function up(): void
     {
-        // SQLite stores enums as text, so no schema change needed.
-        // super_admin is a valid role value used at application level.
+        // SQLite stores enum as text, so just updating validation rules is sufficient
+        // No schema change needed for SQLite
     }
 
     public function down(): void {}

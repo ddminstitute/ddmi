@@ -8,19 +8,19 @@ class FeatureService
     public static function allFeatures(): array
     {
         return [
-            'customers'    => 'Customer Management',
-            'accounts'     => 'Account Management',
-            'transactions' => 'Transactions (Deposit/Withdraw/Transfer)',
-            'loans'        => 'Loan Management',
-            'emi'          => 'EMI Schedule',
-            'collections'  => 'Collection Plans',
-            'saving_plans' => 'Saving Plans',
-            'employees'    => 'Employee Management',
-            'attendance'   => 'Attendance Tracking',
-            'payslips'     => 'Payslip Generation',
-            'expenses'     => 'Company Expenses',
-            'users'        => 'User Management',
-            'reports'      => 'Reports & Analytics',
+            'customers'   => 'Customer Management',
+            'accounts'    => 'Account Management',
+            'transactions'=> 'Transactions (Deposit/Withdraw/Transfer)',
+            'loans'       => 'Loan Management',
+            'emi'         => 'EMI Schedule',
+            'collections' => 'Collection Plans',
+            'saving_plans'=> 'Saving Plans',
+            'employees'   => 'Employee Management',
+            'attendance'  => 'Attendance Tracking',
+            'payslips'    => 'Payslip Generation',
+            'expenses'    => 'Company Expenses',
+            'users'       => 'User Management',
+            'reports'     => 'Reports & Analytics',
         ];
     }
 

@@ -86,6 +86,7 @@
         </a>
 
         <!-- CRM -->
+        @if(auth()->user()?->hasFeature('customers'))
         <div class="nav-sec">CRM</div>
         @php $custOpen = request()->routeIs('customers.*'); @endphp
         <button class="sb-acc-btn {{ $custOpen ? 'open' : '' }}" onclick="toggleAcc('accCust',this)">
@@ -95,9 +96,14 @@
             <a href="{{ route('customers.index') }}" class="child-lnk {{ request()->routeIs('customers.index') ? 'active' : '' }}"><i class="bi bi-list-ul"></i><span class="sb-label">All Customers</span></a>
             <a href="{{ route('customers.create') }}" class="child-lnk {{ request()->routeIs('customers.create') ? 'active' : '' }}"><i class="bi bi-person-plus"></i><span class="sb-label">Add Customer</span></a>
         </div>
+        @endif
 
         <!-- Banking -->
+        @if(auth()->user()?->hasFeature('accounts') || auth()->user()?->hasFeature('transactions') || auth()->user()?->hasFeature('loans'))
         <div class="nav-sec">Banking</div>
+        @endif
+
+        @if(auth()->user()?->hasFeature('accounts'))
         @php $accOpen = request()->routeIs('accounts.*'); @endphp
         <button class="sb-acc-btn {{ $accOpen ? 'open' : '' }}" onclick="toggleAcc('accAcc',this)">
             <i class="bi bi-wallet2"></i><span class="sb-label">Accounts</span><i class="bi bi-chevron-down"></i>
@@ -106,7 +112,9 @@
             <a href="{{ route('accounts.index') }}" class="child-lnk {{ request()->routeIs('accounts.index') ? 'active' : '' }}"><i class="bi bi-list-ul"></i><span class="sb-label">All Accounts</span></a>
             <a href="{{ route('accounts.create') }}" class="child-lnk {{ request()->routeIs('accounts.create') ? 'active' : '' }}"><i class="bi bi-plus-circle"></i><span class="sb-label">Open Account</span></a>
         </div>
+        @endif
 
+        @if(auth()->user()?->hasFeature('transactions'))
         @php $txnOpen = request()->routeIs('transactions.*'); @endphp
         <button class="sb-acc-btn {{ $txnOpen ? 'open' : '' }}" onclick="toggleAcc('accTxn',this)">
             <i class="bi bi-arrow-left-right"></i><span class="sb-label">Transactions</span><i class="bi bi-chevron-down"></i>
@@ -117,7 +125,9 @@
             <a href="{{ route('transactions.withdraw') }}" class="child-lnk {{ request()->routeIs('transactions.withdraw') ? 'active' : '' }}"><i class="bi bi-dash-circle-fill"></i><span class="sb-label">Withdraw</span></a>
             <a href="{{ route('transactions.transfer') }}" class="child-lnk {{ request()->routeIs('transactions.transfer') ? 'active' : '' }}"><i class="bi bi-send-fill"></i><span class="sb-label">Transfer</span></a>
         </div>
+        @endif
 
+        @if(auth()->user()?->hasFeature('loans'))
         @php $loanOpen = request()->routeIs('loans.*'); @endphp
         <button class="sb-acc-btn {{ $loanOpen ? 'open' : '' }}" onclick="toggleAcc('accLoan',this)">
             <i class="bi bi-credit-card"></i><span class="sb-label">Loans & EMI</span><i class="bi bi-chevron-down"></i>
@@ -126,9 +136,14 @@
             <a href="{{ route('loans.index') }}" class="child-lnk {{ request()->routeIs('loans.index') ? 'active' : '' }}"><i class="bi bi-list-ul"></i><span class="sb-label">All Loans</span></a>
             <a href="{{ route('loans.create') }}" class="child-lnk {{ request()->routeIs('loans.create') ? 'active' : '' }}"><i class="bi bi-file-earmark-plus"></i><span class="sb-label">Apply Loan</span></a>
         </div>
+        @endif
 
         <!-- Collections -->
+        @if(auth()->user()?->hasFeature('collections') || auth()->user()?->hasFeature('saving_plans'))
         <div class="nav-sec">Collections</div>
+        @endif
+
+        @if(auth()->user()?->hasFeature('collections'))
         @php $colOpen = request()->routeIs('collection-plans.*'); @endphp
         <button class="sb-acc-btn {{ $colOpen ? 'open' : '' }}" onclick="toggleAcc('accCol',this)">
             <i class="bi bi-collection"></i><span class="sb-label">Collections</span><i class="bi bi-chevron-down"></i>
@@ -137,7 +152,9 @@
             <a href="{{ route('collection-plans.index') }}" class="child-lnk"><i class="bi bi-list-ul"></i><span class="sb-label">All Plans</span></a>
             <a href="{{ route('collection-plans.create') }}" class="child-lnk"><i class="bi bi-plus-circle"></i><span class="sb-label">New Plan</span></a>
         </div>
+        @endif
 
+        @if(auth()->user()?->hasFeature('saving_plans'))
         @php $spOpen = request()->routeIs('saving-plans.*'); @endphp
         <button class="sb-acc-btn {{ $spOpen ? 'open' : '' }}" onclick="toggleAcc('accSP',this)">
             <i class="bi bi-piggy-bank"></i><span class="sb-label">Saving Plans</span><i class="bi bi-chevron-down"></i>
@@ -146,8 +163,10 @@
             <a href="{{ route('saving-plans.index') }}" class="child-lnk"><i class="bi bi-list-ul"></i><span class="sb-label">All Plans</span></a>
             <a href="{{ route('saving-plans.create') }}" class="child-lnk"><i class="bi bi-plus-circle"></i><span class="sb-label">New Plan</span></a>
         </div>
+        @endif
 
         <!-- Analytics -->
+        @if(auth()->user()?->hasFeature('reports'))
         <div class="nav-sec">Analytics</div>
         @php $repOpen = request()->routeIs('reports.*'); @endphp
         <button class="sb-acc-btn {{ $repOpen ? 'open' : '' }}" onclick="toggleAcc('accRep',this)">
@@ -158,9 +177,14 @@
             <a href="{{ route('reports.statement') }}" class="child-lnk"><i class="bi bi-file-text"></i><span class="sb-label">Account Statement</span></a>
             <a href="{{ route('reports.loans') }}" class="child-lnk"><i class="bi bi-graph-up"></i><span class="sb-label">Loan Report</span></a>
         </div>
+        @endif
 
         <!-- HR -->
+        @if(auth()->user()?->hasFeature('employees') || auth()->user()?->hasFeature('expenses') || auth()->user()?->hasFeature('users'))
         <div class="nav-sec">HR & Admin</div>
+        @endif
+
+        @if(auth()->user()?->hasFeature('employees'))
         @php $empOpen = request()->routeIs('employees.*'); @endphp
         <button class="sb-acc-btn {{ $empOpen ? 'open' : '' }}" onclick="toggleAcc('accHR',this)">
             <i class="bi bi-person-badge"></i><span class="sb-label">HR & Payroll</span><i class="bi bi-chevron-down"></i>
@@ -169,7 +193,9 @@
             <a href="{{ route('employees.index') }}" class="child-lnk"><i class="bi bi-people"></i><span class="sb-label">Employees</span></a>
             <a href="{{ route('employees.create') }}" class="child-lnk"><i class="bi bi-person-plus"></i><span class="sb-label">Add Employee</span></a>
         </div>
+        @endif
 
+        @if(auth()->user()?->hasFeature('expenses'))
         @php $expOpen = request()->routeIs('expenses.*'); @endphp
         <button class="sb-acc-btn {{ $expOpen ? 'open' : '' }}" onclick="toggleAcc('accExp',this)">
             <i class="bi bi-receipt-cutoff"></i><span class="sb-label">Expenses</span><i class="bi bi-chevron-down"></i>
@@ -178,8 +204,10 @@
             <a href="{{ route('expenses.index') }}" class="child-lnk"><i class="bi bi-list-ul"></i><span class="sb-label">All Expenses</span></a>
             <a href="{{ route('expenses.create') }}" class="child-lnk"><i class="bi bi-plus-circle"></i><span class="sb-label">Add Expense</span></a>
         </div>
+        @endif
 
         <!-- Settings -->
+        @if(auth()->user()?->hasFeature('users'))
         <div class="nav-sec">Settings</div>
         @php $usrOpen = request()->routeIs('users.*'); @endphp
         <button class="sb-acc-btn {{ $usrOpen ? 'open' : '' }}" onclick="toggleAcc('accUsr',this)">
@@ -188,9 +216,21 @@
         <div class="acc-children {{ $usrOpen ? '' : 'd-none' }}" id="accUsr">
             <a href="{{ route('users.index') }}" class="child-lnk"><i class="bi bi-shield-person"></i><span class="sb-label">User Management</span></a>
         </div>
+        @endif
         <a href="{{ route('profile.edit') }}" class="direct-lnk {{ request()->routeIs('profile.*') ? 'active' : '' }}">
             <i class="bi bi-person-circle"></i><span class="sb-label">My Profile</span>
         </a>
+
+        <!-- Super Admin -->
+        @if(auth()->user()?->isSuperAdmin())
+        <div class="nav-sec">Super Admin</div>
+        <a href="{{ route('super-admin.dashboard') }}" class="direct-lnk {{ request()->routeIs('super-admin.dashboard') ? 'active' : '' }}">
+            <i class="bi bi-shield-lock-fill"></i><span class="sb-label">SA Dashboard</span>
+        </a>
+        <a href="{{ route('super-admin.permissions') }}" class="direct-lnk {{ request()->routeIs('super-admin.permissions') ? 'active' : '' }}">
+            <i class="bi bi-toggles"></i><span class="sb-label">Permissions</span>
+        </a>
+        @endif
     </nav>
 </div>
 

@@ -15,7 +15,7 @@ class UserController extends Controller {
             'name'=>'required|string|max:100',
             'email'=>'required|email|unique:users',
             'phone'=>'nullable|string|max:15',
-            'role'=>'required|in:admin,manager,cashier,agent',
+            'role'=>'required|in:super_admin,admin,manager,cashier,agent',
             'password'=>'required|min:8|confirmed',
         ]);
         $data['password'] = Hash::make($data['password']);
@@ -29,7 +29,7 @@ class UserController extends Controller {
             'name'=>'required|string|max:100',
             'email'=>"required|email|unique:users,email,{$user->id}",
             'phone'=>'nullable|string|max:15',
-            'role'=>'required|in:admin,manager,cashier,agent',
+            'role'=>'required|in:super_admin,admin,manager,cashier,agent',
             'is_active'=>'boolean',
             'password'=>'nullable|min:8|confirmed',
         ]);

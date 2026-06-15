@@ -14,10 +14,13 @@
     <div class="col-md-4"><label>Phone</label><input type="text" name="phone" value="{{ old('phone') }}" class="form-control" placeholder="+91 XXXXXXXXXX"></div>
     <div class="col-md-4"><label>Role *</label>
         <select name="role" class="form-select" required>
-            <option value="admin">Admin</option>
-            <option value="manager">Manager</option>
-            <option value="cashier" selected>Cashier</option>
-            <option value="agent">Agent</option>
+            @if(auth()->user()?->isSuperAdmin())
+            <option value="super_admin" {{ old('role')=='super_admin'?'selected':'' }}>Super Admin</option>
+            @endif
+            <option value="admin" {{ old('role')=='admin'?'selected':'' }}>Admin</option>
+            <option value="manager" {{ old('role')=='manager'?'selected':'' }}>Manager</option>
+            <option value="cashier" {{ old('role','cashier')=='cashier'?'selected':'' }}>Cashier</option>
+            <option value="agent" {{ old('role')=='agent'?'selected':'' }}>Agent</option>
         </select>
     </div>
     <div class="col-md-4"><label>Password *</label><input type="password" name="password" class="form-control" required placeholder="Min. 8 characters"></div>

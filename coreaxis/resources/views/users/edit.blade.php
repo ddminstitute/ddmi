@@ -14,8 +14,8 @@
     <div class="col-md-4"><label>Phone</label><input type="text" name="phone" value="{{ old('phone',$user->phone) }}" class="form-control"></div>
     <div class="col-md-4"><label>Role *</label>
         <select name="role" class="form-select" required>
-            @foreach(['admin','manager','cashier','agent'] as $r)
-            <option value="{{ $r }}" {{ old('role',$user->role ?? 'cashier')==$r?'selected':'' }}>{{ ucfirst($r) }}</option>
+            @foreach(array_merge(auth()->user()?->isSuperAdmin() ? ['super_admin'] : [], ['admin','manager','cashier','agent']) as $r)
+            <option value="{{ $r }}" {{ old('role',$user->role ?? 'cashier')==$r?'selected':'' }}>{{ $r === 'super_admin' ? 'Super Admin' : ucfirst($r) }}</option>
             @endforeach
         </select>
     </div>

@@ -15,8 +15,8 @@
             <td class="text-muted small">{{ $u->email }}</td>
             <td class="small">{{ $u->phone ?? '—' }}</td>
             <td>
-                @php $rc = ['admin'=>'danger','manager'=>'primary','cashier'=>'success','agent'=>'info']; @endphp
-                <span class="badge bg-{{ $rc[$u->role ?? 'cashier'] ?? 'secondary' }}">{{ ucfirst($u->role ?? 'cashier') }}</span>
+                @php $rc = ['super_admin'=>'dark','admin'=>'danger','manager'=>'primary','cashier'=>'success','agent'=>'info']; @endphp
+                <span class="badge bg-{{ $rc[$u->role ?? 'cashier'] ?? 'secondary' }}">{{ $u->role === 'super_admin' ? 'Super Admin' : ucfirst($u->role ?? 'cashier') }}</span>
             </td>
             <td><span class="badge bg-{{ ($u->is_active ?? true)?'success':'secondary' }}">{{ ($u->is_active ?? true)?'Active':'Inactive' }}</span></td>
             <td class="text-muted small">{{ $u->created_at->format('d M Y') }}</td>
