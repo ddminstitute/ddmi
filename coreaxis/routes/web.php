@@ -13,8 +13,8 @@ use App\Http\Controllers\SavingPlanController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
-use App\Http\Controllers\PrintController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\PrintController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WebsiteController::class, 'home'])->name('home');
@@ -82,7 +82,12 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::prefix('super-admin')->name('super-admin.')->group(function () {
+    Route::middleware([function ($request, $next) {
+        if (!auth()->check() || auth()->user()->role !== 'super_admin') {
+            abort(403, 'Super Admin access only.');
+        }
+        return $next($request);
+    }])->prefix('super-admin')->name('super-admin.')->group(function () {
         Route::get('dashboard', [SuperAdminController::class, 'dashboard'])->name('dashboard');
         Route::get('permissions', [SuperAdminController::class, 'permissions'])->name('permissions');
         Route::post('permissions', [SuperAdminController::class, 'updatePermissions'])->name('permissions.update');
