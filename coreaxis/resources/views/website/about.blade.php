@@ -32,7 +32,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="row g-3">
-                    @foreach([['$2B+','Assets Under Management'],['50K+','Happy Customers'],['15+','Years of Service'],['99.9%','System Uptime']] as $stat)
+                    @foreach([['₹50 Cr+','Assets Under Management'],['50K+','Happy Customers'],['10+','Years of Service'],['99.9%','System Uptime']] as $stat)
                     <div class="col-6">
                         <div class="card border-0 text-center p-4 shadow-sm">
                             <div class="fw-800 text-primary" style="font-size:2.2rem">{{ $stat[0] }}</div>

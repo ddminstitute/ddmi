@@ -28,12 +28,12 @@
                     </div>
                     <div class="d-flex align-items-baseline gap-2 mb-4 p-3 rounded-3" style="background:rgba(21,101,192,.06)">
                         <span style="font-size:3rem;font-weight:900;color:var(--primary)">4.5%</span>
-                        <div><div class="fw-600 text-primary">APY Interest</div><div class="text-muted small">Compounded monthly</div></div>
+                        <div><div class="fw-600 text-primary">p.a. Interest</div><div class="text-muted small">Compounded monthly</div></div>
                     </div>
                     <div class="row g-2 mb-4">
                         @php $features = [
-                            ['Minimum Opening Deposit','$100'],['Monthly Maintenance Fee','FREE'],['Interest Rate','4.5% APY'],['Withdrawals per Month','3 Free'],
-                            ['Online Banking','Yes'],['Mobile App Access','Yes'],['ATM Card','Free'],['FDIC Insurance','Up to $250,000'],
+                            ['Minimum Opening Deposit','₹500'],['Monthly Maintenance Fee','FREE'],['Interest Rate','4.5% p.a.'],['Withdrawals per Month','3 Free'],
+                            ['Online Banking','Yes'],['Mobile App Access','Yes'],['ATM Card','Free'],['RBI Insurance','Yes'],
                             ['Auto-Save Features','Yes'],['Account Statements','Monthly & On-Demand'],
                         ]; @endphp
                         @foreach($features as $f)
@@ -64,12 +64,12 @@
                     </div>
                     <div class="d-flex align-items-baseline gap-2 mb-4 p-3 rounded-3" style="background:rgba(255,255,255,.12)">
                         <span style="font-size:3rem;font-weight:900;color:#fff">0.5%</span>
-                        <div><div class="fw-600 text-white">APY Interest</div><div style="color:rgba(255,255,255,.6)" class="small">On daily balance</div></div>
+                        <div><div class="fw-600 text-white">p.a. Interest</div><div style="color:rgba(255,255,255,.6)" class="small">On daily balance</div></div>
                     </div>
                     <div class="row g-2 mb-4">
                         @php $features = [
-                            ['Minimum Opening Deposit','$0'],['Monthly Maintenance Fee','FREE'],['Interest Rate','0.5% APY'],['Transactions per Month','Unlimited'],
-                            ['Online Banking','Yes'],['Mobile App Access','Yes'],['Debit Card','Free Visa Card'],['FDIC Insurance','Up to $250,000'],
+                            ['Minimum Opening Deposit','₹0'],['Monthly Maintenance Fee','FREE'],['Interest Rate','0.5% p.a.'],['Transactions per Month','Unlimited'],
+                            ['Online Banking','Yes'],['Mobile App Access','Yes'],['Debit Card','Free RuPay Card'],['UPI Support','Yes'],
                             ['Overdraft Protection','Yes'],['Bill Pay','Included Free'],
                         ]; @endphp
                         @foreach($features as $f)
@@ -95,12 +95,12 @@
                     <p class="text-muted">Designed for businesses and high-frequency transaction users.</p>
                     <div class="d-flex align-items-baseline gap-2 mb-4 p-3 rounded-3" style="background:rgba(106,27,154,.06)">
                         <span style="font-size:3rem;font-weight:900;color:#6A1B9A">1.0%</span>
-                        <div><div class="fw-600" style="color:#6A1B9A">APY Interest</div><div class="text-muted small">On average balance</div></div>
+                        <div><div class="fw-600" style="color:#6A1B9A">p.a. Interest</div><div class="text-muted small">On average balance</div></div>
                     </div>
                     <div class="row g-2 mb-4">
                         @php $features = [
-                            ['Minimum Opening Deposit','$500'],['Monthly Maintenance Fee','$15/mo'],['Interest Rate','1.0% APY'],['Transactions per Month','Unlimited'],
-                            ['Online Banking','Yes'],['Mobile App Access','Yes'],['Multiple Signatories','Yes'],['Bulk Payments','Supported'],
+                            ['Minimum Opening Deposit','₹5,000'],['Monthly Maintenance Fee','₹500/mo'],['Interest Rate','1.0% p.a.'],['Transactions per Month','Unlimited'],
+                            ['Online Banking','Yes'],['Mobile App Access','Yes'],['Multiple Signatories','Yes'],['NEFT/RTGS','Supported'],
                             ['Dedicated Manager','Yes'],['Priority Support','24/7'],
                         ]; @endphp
                         @foreach($features as $f)
@@ -127,7 +127,7 @@
                     <p class="text-muted">Lock your funds and earn guaranteed higher returns over time.</p>
                     <div class="d-flex align-items-baseline gap-2 mb-4 p-3 rounded-3" style="background:rgba(230,81,0,.06)">
                         <span style="font-size:3rem;font-weight:900;color:#E65100">8.5%</span>
-                        <div><div class="fw-600" style="color:#E65100">Max APY</div><div class="text-muted small">For 5-year tenure</div></div>
+                        <div><div class="fw-600" style="color:#E65100">Max p.a.</div><div class="text-muted small">For 5-year tenure</div></div>
                     </div>
                     {{-- Tenure Rate Table --}}
                     <div class="mb-4">
@@ -140,7 +140,7 @@
                         @endforeach
                     </div>
                     <div class="row g-2 mb-4">
-                        @foreach([['Minimum Deposit','$1,000'],['Maximum Deposit','No Limit'],['Premature Withdrawal','Allowed (penalty applies)'],['Auto Renewal','Yes']] as $f)
+                        @foreach([['Minimum Deposit','₹10,000'],['Maximum Deposit','No Limit'],['Premature Withdrawal','Allowed (penalty applies)'],['Auto Renewal','Yes']] as $f)
                         <div class="col-12">
                             <div class="d-flex justify-content-between p-2 rounded-2" style="background:#f8faff">
                                 <span class="small text-muted">{{ $f[0] }}</span><span class="small fw-semibold">{{ $f[1] }}</span>
@@ -176,13 +176,13 @@
                     </thead>
                     <tbody>
                         @foreach([
-                            ['Interest Rate','4.5% APY','0.5% APY','1.0% APY','Up to 8.5%'],
-                            ['Min. Opening','$100','$0','$500','$1,000'],
-                            ['Monthly Fee','Free','Free','$15','Free'],
+                            ['Interest Rate','4.5% p.a.','0.5% p.a.','1.0% p.a.','Up to 8.5%'],
+                            ['Min. Opening','₹500','₹0','₹5,000','₹10,000'],
+                            ['Monthly Fee','Free','Free','₹500','Free'],
                             ['Transactions','3/month','Unlimited','Unlimited','On maturity'],
-                            ['Debit Card','Yes','Yes (Visa)','Yes','No'],
+                            ['Debit Card','Yes','Yes (RuPay)','Yes','No'],
                             ['Online Banking','✓','✓','✓','✓'],
-                            ['ATM Access','Yes','Yes (rebates)','Yes','No'],
+                            ['UPI Support','Yes','Yes','Yes','No'],
                             ['Overdraft Protection','No','Yes','Yes','No'],
                             ['Business Use','No','Limited','Yes','Yes'],
                             ['Best For','Personal savings','Daily spending','Business use','Long-term growth'],
@@ -211,9 +211,9 @@
                 <div class="accordion" id="faqAccordion">
                     @foreach([
                         ['Can I have multiple accounts?','Yes! You can open multiple account types. For example, a Savings account for your emergency fund and a Checking account for daily expenses.'],
-                        ['Is there a minimum balance requirement?','Savings accounts require $100 minimum. Checking accounts have no minimum. Current accounts require $500. Fixed Deposits start at $1,000.'],
+                        ['Is there a minimum balance requirement?','Savings accounts require ₹500 minimum. Checking accounts have no minimum. Current accounts require ₹5,000. Fixed Deposits start at ₹10,000.'],
                         ['How long does it take to open an account?','Most accounts are opened instantly after registration. You can start banking within minutes of completing the online form.'],
-                        ['Are my deposits insured?','Yes. All deposits are FDIC insured up to $250,000 per depositor per account category.'],
+                        ['Are my deposits insured?','Yes. All deposits are handled as per RBI guidelines for customer protection.'],
                         ['Can I switch account types later?','Yes. You can open additional account types or upgrade anytime. Contact our support team for assistance.'],
                     ] as $i => $faq)
                     <div class="accordion-item border-0 mb-2 rounded-3 shadow-sm">

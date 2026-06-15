@@ -48,7 +48,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Phone (optional)</label>
-                                <input type="tel" name="phone" class="form-control" value="{{ old('phone') }}" placeholder="+1 (555) 000-0000">
+                                <input type="tel" name="phone" class="form-control" value="{{ old('phone') }}" placeholder="+91 XXXXXXXXXX">
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">Subject <span class="text-danger">*</span></label>
