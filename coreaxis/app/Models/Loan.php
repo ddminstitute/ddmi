@@ -29,6 +29,8 @@ class Loan extends Model
     public function account() { return $this->belongsTo(Account::class); }
     public function payments() { return $this->hasMany(LoanPayment::class)->latest(); }
     public function emiSchedules() { return $this->hasMany(EmiSchedule::class)->orderBy('installment_number'); }
+    public function guarantors() { return $this->hasMany(\App\Models\LoanGuarantor::class); }
+    public function collaterals() { return $this->hasMany(\App\Models\LoanCollateral::class); }
 
     public static function generateLoanNumber(): string
     {
