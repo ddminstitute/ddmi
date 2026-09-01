@@ -29,7 +29,7 @@
             <tr><td class="text-muted">{{ in_array($transaction->transaction_type,['transfer_in'])?'From':'To' }} Account</td><td>{{ $transaction->relatedAccount->account_number }}</td></tr>
             @endif
             <tr><td class="text-muted">Description</td><td>{{ $transaction->description }}</td></tr>
-            <tr><td class="text-muted">Date &amp; Time</td><td>{{ $transaction->created_at->format('M d, Y H:i:s') }}</td></tr>
+            <tr><td class="text-muted">Date & Time</td><td>{{ $transaction->created_at->format('M d, Y H:i:s') }}</td></tr>
             <tr><td class="text-muted">Status</td><td><span class="badge bg-success">{{ ucfirst($transaction->status) }}</span></td></tr>
         </table>
     </div>
@@ -43,7 +43,7 @@
         <form method="POST" action="{{ route('transactions.reverse',$transaction) }}" onsubmit="return confirm('Confirm reversal of ₹{{ number_format($transaction->amount,2) }}?')">
             @csrf
             <div class="mb-2">
-                <input type="text" name="reversal_reason" class="form-control" placeholder="Reason for reversal *" required>
+                <input type="text" name="reason" class="form-control" placeholder="Reason for reversal *" required>
             </div>
             <button class="btn btn-outline-danger btn-sm"><i class="bi bi-arrow-counterclockwise me-1"></i>Reverse Transaction</button>
         </form>
