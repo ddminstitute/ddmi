@@ -56,7 +56,7 @@ class DemandDraftController extends Controller
                 'amount'           => $totalDebit,
                 'balance_before'   => $before,
                 'balance_after'    => $account->fresh()->balance,
-                'description'      => strtoupper(str_replace('_',' ',$data['instrument_type']))." - {$ddNum} to {$data['payee_name']}",
+                'description'      => strtoupper(str_replace('_',' ',$data['instrument_type'])). " - {$ddNum} to {$data['payee_name']}",
                 'reference_number' => Transaction::generateReference(),
                 'status'           => 'completed',
             ]);
@@ -81,6 +81,7 @@ class DemandDraftController extends Controller
         if ($demandDraft->status !== 'active') return back()->with('error','Cannot cancel this DD.');
 
         DB::transaction(function() use ($demandDraft, $request) {
+            // Refund: credit back principal (charges not refunded)
             $account = $demandDraft->account;
             $before  = $account->balance;
             $account->increment('balance', $demandDraft->amount);
@@ -103,5 +104,11 @@ class DemandDraftController extends Controller
         });
 
         return redirect()->route('demand-drafts.index')->with('success','DD cancelled and principal refunded.');
+    }
+
+    public function printReceipt(DemandDraft $demandDraft)
+    {
+        $demandDraft->load('account.user');
+        return view('print.dd-receipt', compact('demandDraft'));
     }
 }

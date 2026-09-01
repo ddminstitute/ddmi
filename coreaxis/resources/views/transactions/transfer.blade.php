@@ -50,6 +50,14 @@
                 <label class="form-label fw-semibold">Description</label>
                 <input type="text" name="description" class="form-control" value="{{ old('description') }}" placeholder="Fund transfer">
             </div>
+            @if(session('otp_required'))
+            <div class="mb-3">
+                <label class="form-label fw-semibold text-warning"><i class="bi bi-shield-lock me-1"></i>OTP Verification Required</label>
+                <input type="text" name="otp" class="form-control @error('otp') is-invalid @enderror" placeholder="Enter 6-digit OTP sent to your phone" maxlength="6" inputmode="numeric" pattern="[0-9]{6}">
+                @error('otp')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                <div class="form-text">An OTP has been sent to your registered mobile number for this high-value transaction.</div>
+            </div>
+            @endif
             <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold"><i class="bi bi-send me-2"></i>Transfer Now</button>
         </form>
     </div>
