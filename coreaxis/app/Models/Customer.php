@@ -23,6 +23,8 @@ class Customer extends Model {
         return $this->hasMany(Loan::class, 'customer_id', 'id');
     }
     public function collectionPlans() { return $this->hasMany(CollectionPlan::class); }
+    public function portalUser() { return $this->hasOne(User::class, 'customer_id'); }
+
     public function getStatusBadge(): string {
         return match($this->status) { 'active'=>'success','inactive'=>'secondary','blacklisted'=>'danger', default=>'secondary' };
     }
