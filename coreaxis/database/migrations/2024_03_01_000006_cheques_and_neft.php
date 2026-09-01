@@ -51,12 +51,24 @@ return new class extends Migration {
         });
 
         Schema::table('transactions', function (Blueprint $table) {
-            if (!Schema::hasColumn('transactions', 'is_reversed')) { $table->boolean('is_reversed')->default(false)->after('status'); }
-            if (!Schema::hasColumn('transactions', 'reversed_by')) { $table->unsignedBigInteger('reversed_by')->nullable()->after('is_reversed'); }
-            if (!Schema::hasColumn('transactions', 'reversed_at')) { $table->timestamp('reversed_at')->nullable()->after('reversed_by'); }
-            if (!Schema::hasColumn('transactions', 'reversal_reason')) { $table->string('reversal_reason')->nullable()->after('reversed_at'); }
-            if (!Schema::hasColumn('transactions', 'parent_transaction_id')) { $table->unsignedBigInteger('parent_transaction_id')->nullable()->after('reversal_reason'); }
-            if (!Schema::hasColumn('transactions', 'transaction_mode')) { $table->enum('transaction_mode', ['cash','cheque','neft','rtgs','imps','upi','internal'])->default('cash')->after('transaction_type'); }
+            if (!Schema::hasColumn('transactions', 'is_reversed')) {
+                $table->boolean('is_reversed')->default(false)->after('status');
+            }
+            if (!Schema::hasColumn('transactions', 'reversed_by')) {
+                $table->unsignedBigInteger('reversed_by')->nullable()->after('is_reversed');
+            }
+            if (!Schema::hasColumn('transactions', 'reversed_at')) {
+                $table->timestamp('reversed_at')->nullable()->after('reversed_by');
+            }
+            if (!Schema::hasColumn('transactions', 'reversal_reason')) {
+                $table->string('reversal_reason')->nullable()->after('reversed_at');
+            }
+            if (!Schema::hasColumn('transactions', 'parent_transaction_id')) {
+                $table->unsignedBigInteger('parent_transaction_id')->nullable()->after('reversal_reason');
+            }
+            if (!Schema::hasColumn('transactions', 'transaction_mode')) {
+                $table->enum('transaction_mode', ['cash','cheque','neft','rtgs','imps','upi','internal'])->default('cash')->after('transaction_type');
+            }
         });
 
         Schema::create('standing_instructions', function (Blueprint $table) {

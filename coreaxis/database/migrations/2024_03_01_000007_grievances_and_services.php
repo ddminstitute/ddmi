@@ -30,7 +30,11 @@ return new class extends Migration {
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->unsignedBigInteger('account_id')->nullable();
             $table->unsignedBigInteger('requested_by')->nullable();
-            $table->enum('request_type', ['stop_cheque','address_change','mobile_change','email_change','passbook_reissue','account_unfreeze','statement_request','nominee_change','other'])->default('other');
+            $table->enum('request_type', [
+                'stop_cheque','address_change','mobile_change','email_change',
+                'passbook_reissue','account_unfreeze','statement_request',
+                'nominee_change','other'
+            ])->default('other');
             $table->text('details')->nullable();
             $table->enum('status', ['pending','approved','rejected','completed'])->default('pending');
             $table->unsignedBigInteger('processed_by')->nullable();

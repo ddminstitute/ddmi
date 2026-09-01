@@ -46,6 +46,10 @@
                         <label>Annual Income (₹)</label>
                         <input type="number" name="annual_income" value="{{ old('annual_income') }}" class="form-control" placeholder="0.00" step="0.01" min="0">
                     </div>
+                    <div class="col-md-4">
+                        <label>PAN Number</label>
+                        <input type="text" name="pan_number" value="{{ old('pan_number') }}" class="form-control" placeholder="ABCDE1234F" maxlength="10" style="text-transform:uppercase">
+                    </div>
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@
     <div class="ms-auto d-flex gap-2">
         <a href="{{ route('print.passbook',$account) }}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-book me-1"></i>Passbook</a>
         <a href="{{ route('print.statement',$account) }}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-text me-1"></i>Statement</a>
+        <a href="{{ route('accounts.nominees.index',$account) }}" class="btn btn-sm btn-outline-info"><i class="bi bi-people me-1"></i>Nominees</a>
         <a href="{{ route('accounts.edit',$account) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil me-1"></i>Edit</a>
     </div>
 </div>

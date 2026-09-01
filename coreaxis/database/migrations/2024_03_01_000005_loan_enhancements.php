@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
+        // Guarantors
         Schema::create('loan_guarantors', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('loan_id');
@@ -21,6 +22,7 @@ return new class extends Migration {
             $table->foreign('loan_id')->references('id')->on('loans')->onDelete('cascade');
         });
 
+        // Collateral
         Schema::create('loan_collaterals', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('loan_id');
@@ -36,22 +38,48 @@ return new class extends Migration {
             $table->foreign('loan_id')->references('id')->on('loans')->onDelete('cascade');
         });
 
+        // Loan overdue/penalty fields
         Schema::table('loans', function (Blueprint $table) {
-            if (!Schema::hasColumn('loans', 'overdue_days')) { $table->unsignedInteger('overdue_days')->default(0)->after('outstanding_amount'); }
-            if (!Schema::hasColumn('loans', 'penalty_amount')) { $table->decimal('penalty_amount', 15, 2)->default(0)->after('overdue_days'); }
-            if (!Schema::hasColumn('loans', 'penal_rate')) { $table->decimal('penal_rate', 5, 2)->default(2.00)->after('penalty_amount'); }
-            if (!Schema::hasColumn('loans', 'is_npa')) { $table->boolean('is_npa')->default(false)->after('penal_rate'); }
-            if (!Schema::hasColumn('loans', 'npa_date')) { $table->date('npa_date')->nullable()->after('is_npa'); }
-            if (!Schema::hasColumn('loans', 'foreclosure_date')) { $table->date('foreclosure_date')->nullable()->after('npa_date'); }
-            if (!Schema::hasColumn('loans', 'foreclosure_amount')) { $table->decimal('foreclosure_amount', 15, 2)->nullable()->after('foreclosure_date'); }
-            if (!Schema::hasColumn('loans', 'foreclosure_charges')) { $table->decimal('foreclosure_charges', 15, 2)->default(0)->after('foreclosure_amount'); }
-            if (!Schema::hasColumn('loans', 'restructured_at')) { $table->timestamp('restructured_at')->nullable()->after('foreclosure_charges'); }
-            if (!Schema::hasColumn('loans', 'restructure_reason')) { $table->string('restructure_reason')->nullable()->after('restructured_at'); }
+            if (!Schema::hasColumn('loans', 'overdue_days')) {
+                $table->unsignedInteger('overdue_days')->default(0)->after('outstanding_amount');
+            }
+            if (!Schema::hasColumn('loans', 'penalty_amount')) {
+                $table->decimal('penalty_amount', 15, 2)->default(0)->after('overdue_days');
+            }
+            if (!Schema::hasColumn('loans', 'penal_rate')) {
+                $table->decimal('penal_rate', 5, 2)->default(2.00)->after('penalty_amount');
+            }
+            if (!Schema::hasColumn('loans', 'is_npa')) {
+                $table->boolean('is_npa')->default(false)->after('penal_rate');
+            }
+            if (!Schema::hasColumn('loans', 'npa_date')) {
+                $table->date('npa_date')->nullable()->after('is_npa');
+            }
+            if (!Schema::hasColumn('loans', 'foreclosure_date')) {
+                $table->date('foreclosure_date')->nullable()->after('npa_date');
+            }
+            if (!Schema::hasColumn('loans', 'foreclosure_amount')) {
+                $table->decimal('foreclosure_amount', 15, 2)->nullable()->after('foreclosure_date');
+            }
+            if (!Schema::hasColumn('loans', 'foreclosure_charges')) {
+                $table->decimal('foreclosure_charges', 15, 2)->default(0)->after('foreclosure_amount');
+            }
+            if (!Schema::hasColumn('loans', 'restructured_at')) {
+                $table->timestamp('restructured_at')->nullable()->after('foreclosure_charges');
+            }
+            if (!Schema::hasColumn('loans', 'restructure_reason')) {
+                $table->string('restructure_reason')->nullable()->after('restructured_at');
+            }
         });
 
+        // EmiSchedule overdue
         Schema::table('emi_schedules', function (Blueprint $table) {
-            if (!Schema::hasColumn('emi_schedules', 'overdue_days')) { $table->unsignedInteger('overdue_days')->default(0)->after('status'); }
-            if (!Schema::hasColumn('emi_schedules', 'penalty_amount')) { $table->decimal('penalty_amount', 15, 2)->default(0)->after('overdue_days'); }
+            if (!Schema::hasColumn('emi_schedules', 'overdue_days')) {
+                $table->unsignedInteger('overdue_days')->default(0)->after('status');
+            }
+            if (!Schema::hasColumn('emi_schedules', 'penalty_amount')) {
+                $table->decimal('penalty_amount', 15, 2)->default(0)->after('overdue_days');
+            }
         });
     }
 
