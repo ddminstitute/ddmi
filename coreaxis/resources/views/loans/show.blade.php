@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex align-items-center mb-3 gap-2">
     <a href="{{ route('loans.index') }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
-    <h5 class="mb-0 fw-bold">Loan &mdash; {{ $loan->loan_number }}</h5>
+    <h5 class="mb-0 fw-bold">Loan — {{ $loan->loan_number }}</h5>
     <span class="badge bg-{{ $loan->getStatusBadge() }} ms-2">{{ ucfirst($loan->status) }}</span>
     <div class="ms-auto d-flex gap-2 flex-wrap">
         <a href="{{ route('loans.guarantors',$loan) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-people me-1"></i>Guarantors</a>
@@ -69,7 +69,6 @@
         @endif
     </div>
 </div>
-
 @if(count($schedule) > 0)
 <div class="card mb-4">
     <div class="card-header"><i class="bi bi-table me-2"></i>Repayment Schedule</div>
@@ -93,7 +92,6 @@
     </div>
 </div>
 @endif
-
 @if($loan->payments->count() > 0)
 <div class="card">
     <div class="card-header"><i class="bi bi-receipt me-2"></i>Payment History</div>
