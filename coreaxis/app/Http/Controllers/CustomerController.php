@@ -93,12 +93,36 @@ class CustomerController extends Controller {
                 if ($customer->$field) Storage::disk('public')->delete($customer->$field);
                 $data[$field] = $request->file($field)->store('customers','public');
             } else {
-                unset($data[$field]); // don't overwrite existing file if not uploaded
+                unset($data[$field]);
             }
         }
         $customer->update($data);
         return redirect()->route('customers.show', $customer)->with('success', 'Customer updated successfully.');
     }
+    public function createPortalAccount(Customer $customer)
+    {
+        if ($customer->portalUser) {
+            return back()->with('error', 'Portal account already exists for this customer.');
+        }
+
+        // Default password is phone number; customer must change on first login
+        $password = $customer->phone ?? 'Portal@123';
+        $user = \App\Models\User::create([
+            'name'        => $customer->name,
+            'email'       => $customer->email ?? strtolower(str_replace(' ', '.', $customer->name)) . '.' . $customer->id . '@portal.local',
+            'phone'       => $customer->phone,
+            'password'    => \Illuminate\Support\Facades\Hash::make($password),
+            'role'        => 'customer',
+            'is_active'   => true,
+            'customer_id' => $customer->id,
+        ]);
+
+        // Link existing accounts to this user
+        $customer->accounts()->whereNull('user_id')->update(['user_id' => $user->id]);
+
+        return back()->with('success', "Portal account created. Login: {$user->email} / Password: {$password} (phone number). Ask customer to change password after first login.");
+    }
+
     public function destroy(Customer $customer) {
         if ($customer->accounts()->where('status','active')->exists()) {
             return back()->with('error', 'Cannot delete customer with active accounts.');

@@ -5,6 +5,14 @@
     <h5 class="mb-0 fw-bold"><i class="bi bi-person-circle me-2 text-primary"></i>Customer Profile</h5>
     <div class="d-flex gap-2">
         <a href="{{ route('customers.edit',$customer) }}" class="btn btn-primary btn-sm"><i class="bi bi-pencil me-1"></i>Edit</a>
+        @if(!$customer->portalUser)
+        <form method="POST" action="{{ route('customers.portal-account',$customer) }}" class="d-inline" onsubmit="return confirm('Create portal login for this customer?')">
+            @csrf
+            <button class="btn btn-outline-success btn-sm"><i class="bi bi-person-badge me-1"></i>Create Portal Account</button>
+        </form>
+        @else
+        <span class="btn btn-sm btn-success disabled"><i class="bi bi-check-circle me-1"></i>Portal Active</span>
+        @endif
         <a href="{{ route('customers.index') }}" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Back</a>
     </div>
 </div>

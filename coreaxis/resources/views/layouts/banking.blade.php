@@ -10,10 +10,14 @@
         :root{--pri:#1565C0;--pri-d:#0D47A1;--acc:#00BCD4;--sw:262px;--sw-c:62px;}
         *{font-family:'Segoe UI',system-ui,sans-serif;}
         body{background:#f0f2f5;}
+
+        /* ── SIDEBAR ── */
         .sidebar{width:var(--sw);height:100vh;background:linear-gradient(180deg,#050d1a 0%,#0D47A1 60%,#1565C0 100%);position:fixed;top:0;left:0;z-index:1050;box-shadow:4px 0 20px rgba(0,0,0,.25);overflow-y:auto;overflow-x:hidden;transition:transform .28s ease,width .28s ease;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent;}
         .sidebar::-webkit-scrollbar{width:4px;}
         .sidebar::-webkit-scrollbar-thumb{background:rgba(255,255,255,.25);border-radius:4px;}
         .sidebar::-webkit-scrollbar-track{background:transparent;}
+
+        /* Desktop collapse */
         body.sb-col .sidebar{width:var(--sw-c);}
         body.sb-col .sb-label{display:none!important;}
         body.sb-col .nav-sec{display:none!important;}
@@ -23,6 +27,8 @@
         body.sb-col .acc-children{display:none!important;}
         body.sb-col .direct-lnk{justify-content:center;padding:.6rem;}
         body.sb-col .main-content{margin-left:var(--sw-c);}
+
+        /* Mobile: sidebar hidden off-screen by default */
         @media(max-width:767px){
             .sidebar{transform:translateX(-100%);width:var(--sw)!important;}
             body.sb-open .sidebar{transform:translateX(0);}
@@ -31,11 +37,15 @@
             body.sb-open .sb-overlay{display:block;}
             body.sb-col .sidebar{width:var(--sw)!important;}
         }
+
+        /* ── BRAND ── */
         .sb-brand{padding:.9rem 1rem;border-bottom:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:.65rem;overflow:hidden;white-space:nowrap;}
         .sb-icon{width:36px;height:36px;background:var(--acc);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
         .sb-icon i{color:#fff;font-size:1.1rem;}
         .sb-brand-text h6{color:#fff;margin:0;font-weight:700;font-size:.9rem;}
         .sb-brand-text small{color:rgba(255,255,255,.45);font-size:.65rem;}
+
+        /* ── NAV SECTIONS ── */
         .nav-sec{color:rgba(255,255,255,.3);font-size:.62rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:.85rem 1rem .2rem;white-space:nowrap;}
         .sb-acc-btn{display:flex;align-items:center;gap:.5rem;color:rgba(255,255,255,.72);padding:.55rem .9rem;border-radius:8px;margin:1px 7px;font-size:.82rem;background:transparent;border:none;width:calc(100% - 14px);text-align:left;cursor:pointer;transition:all .2s;white-space:nowrap;}
         .sb-acc-btn:hover{background:rgba(255,255,255,.1);color:#fff;}
@@ -51,6 +61,8 @@
         .direct-lnk{display:flex;align-items:center;gap:.5rem;color:rgba(255,255,255,.72);padding:.55rem .9rem;border-radius:8px;margin:1px 7px;font-size:.82rem;text-decoration:none;transition:all .2s;white-space:nowrap;}
         .direct-lnk:hover,.direct-lnk.active{background:rgba(255,255,255,.14);color:#fff;}
         .direct-lnk>i{width:17px;flex-shrink:0;font-size:.88rem;}
+
+        /* ── SECTION GROUP ── */
         .sec-group-btn{width:100%;background:none;border:none;border-top:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.45);display:flex;align-items:center;justify-content:space-between;padding:.42rem .9rem;margin-top:.3rem;cursor:pointer;transition:all .2s;font-size:.7rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;}
         .sec-group-btn:hover{color:rgba(255,255,255,.75);background:rgba(255,255,255,.04);}
         .sec-group-btn.collapsed{color:rgba(255,255,255,.3);}
@@ -59,11 +71,15 @@
         .sec-group-btn.collapsed .sec-chevron{transform:rotate(-90deg);}
         .sec-group-body{overflow:hidden;transition:max-height .3s ease;}
         .sec-group-body.sg-hidden{display:none;}
+
+        /* ── MAIN ── */
         .main-content{margin-left:var(--sw);min-height:100vh;transition:margin-left .28s ease;}
         .topbar{background:#fff;padding:.6rem 1.2rem;box-shadow:0 2px 10px rgba(0,0,0,.06);position:sticky;top:0;z-index:99;display:flex;align-items:center;justify-content:space-between;}
         .sb-toggle{background:none;border:none;padding:.3rem .45rem;border-radius:8px;color:#555;cursor:pointer;transition:.2s;font-size:1.2rem;line-height:1;}
         .sb-toggle:hover{background:#f1f5f9;}
         .page-content{padding:1.2rem;}
+
+        /* ── CARDS ── */
         .card{border:none;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,.07);}
         .card-header{background:#fff;border-bottom:1px solid #f1f1f1;border-radius:14px 14px 0 0!important;padding:.85rem 1.2rem;font-weight:600;font-size:.875rem;}
         .stat-card{border-radius:14px;padding:1.2rem;color:#fff;}
@@ -75,6 +91,8 @@
         .badge{font-size:.7rem;}
         .form-control,.form-select{border-radius:9px;border:1.5px solid #e2e8f0;font-size:.875rem;}
         .form-control:focus,.form-select:focus{border-color:var(--pri);box-shadow:0 0 0 3px rgba(21,101,192,.1);}
+
+        /* ── MOBILE RESPONSIVE ── */
         @media(max-width:575px){
             .page-content{padding:.75rem;}
             .stat-card{padding:.9rem;}
@@ -94,16 +112,23 @@
     @stack('styles')
 </head>
 <body>
+
+<!-- Mobile Overlay -->
 <div class="sb-overlay" id="sbOverlay"></div>
+
+<!-- SIDEBAR -->
 <div class="sidebar" id="sidebar">
     <div class="sb-brand">
         <div class="sb-icon"><i class="bi bi-bank2"></i></div>
         <div class="sb-brand-text"><h6>CoreAxis</h6><small>Financial Management</small></div>
     </div>
     <nav class="py-2 pb-3">
+
         <a href="{{ route('dashboard') }}" class="direct-lnk {{ request()->routeIs('dashboard') ? 'active' : '' }}">
             <i class="bi bi-speedometer2"></i><span class="sb-label">Dashboard</span>
         </a>
+
+        {{-- CRM GROUP --}}
         @if(auth()->user()?->hasFeature('customers'))
         @php $crmActive = request()->routeIs('customers.*'); @endphp
         <button class="sec-group-btn {{ $crmActive ? '' : '' }}" onclick="toggleGroup('grpCRM',this)" id="btnGrpCRM">
@@ -121,7 +146,10 @@
             </div>
         </div>
         @endif
+
+        {{-- BANKING GROUP --}}
         @if(auth()->user()?->hasFeature('accounts') || auth()->user()?->hasFeature('transactions') || auth()->user()?->hasFeature('loans'))
+        @php $bankingActive = request()->routeIs('accounts.*') || request()->routeIs('transactions.*') || request()->routeIs('loans.*'); @endphp
         <button class="sec-group-btn" onclick="toggleGroup('grpBanking',this)" id="btnGrpBanking">
             <span class="sec-group-label"><i class="bi bi-bank me-1"></i><span class="sb-label">Banking</span></span>
             <i class="bi bi-chevron-down sec-chevron sb-label"></i>
@@ -161,7 +189,10 @@
             @endif
         </div>
         @endif
+
+        {{-- COLLECTIONS GROUP --}}
         @if(auth()->user()?->hasFeature('collections') || auth()->user()?->hasFeature('saving_plans'))
+        @php $colActive = request()->routeIs('collection-plans.*') || request()->routeIs('saving-plans.*'); @endphp
         <button class="sec-group-btn" onclick="toggleGroup('grpCollections',this)" id="btnGrpCollections">
             <span class="sec-group-label"><i class="bi bi-collection-fill me-1"></i><span class="sb-label">Collections</span></span>
             <i class="bi bi-chevron-down sec-chevron sb-label"></i>
@@ -189,6 +220,8 @@
             @endif
         </div>
         @endif
+
+        {{-- BANKING EXTRAS GROUP --}}
         @php $extActive = request()->routeIs('fixed-deposits.*')||request()->routeIs('recurring-deposits.*')||request()->routeIs('cheques.*')||request()->routeIs('fund-transfers.*')||request()->routeIs('standing-instructions.*')||request()->routeIs('demand-drafts.*'); @endphp
         <button class="sec-group-btn" onclick="toggleGroup('grpBankExt',this)" id="btnGrpBankExt">
             <span class="sec-group-label"><i class="bi bi-safe2 me-1"></i><span class="sb-label">Deposits & Payments</span></span>
@@ -202,6 +235,8 @@
             <a href="{{ route('standing-instructions.index') }}" class="direct-lnk {{ request()->routeIs('standing-instructions.*') ? 'active' : '' }}"><i class="bi bi-repeat"></i><span class="sb-label">Standing Instructions</span></a>
             <a href="{{ route('demand-drafts.index') }}" class="direct-lnk {{ request()->routeIs('demand-drafts.*') ? 'active' : '' }}"><i class="bi bi-file-earmark-text"></i><span class="sb-label">Demand Drafts / PO</span></a>
         </div>
+
+        {{-- KYC & COMPLIANCE --}}
         @php $kycActive = request()->routeIs('kyc.*')||request()->routeIs('grievances.*')||request()->routeIs('service-requests.*'); @endphp
         <button class="sec-group-btn" onclick="toggleGroup('grpKYC',this)" id="btnGrpKYC">
             <span class="sec-group-label"><i class="bi bi-shield-check me-1"></i><span class="sb-label">KYC & Compliance</span></span>
@@ -212,7 +247,10 @@
             <a href="{{ route('grievances.index') }}" class="direct-lnk {{ request()->routeIs('grievances.*') ? 'active' : '' }}"><i class="bi bi-chat-square-text"></i><span class="sb-label">Grievances</span></a>
             <a href="{{ route('service-requests.index') }}" class="direct-lnk {{ request()->routeIs('service-requests.*') ? 'active' : '' }}"><i class="bi bi-clipboard-check"></i><span class="sb-label">Service Requests</span></a>
         </div>
+
+        {{-- ANALYTICS GROUP --}}
         @if(auth()->user()?->hasFeature('reports'))
+        @php $repActive = request()->routeIs('reports.*'); @endphp
         <button class="sec-group-btn" onclick="toggleGroup('grpAnalytics',this)" id="btnGrpAnalytics">
             <span class="sec-group-label"><i class="bi bi-bar-chart-fill me-1"></i><span class="sb-label">Analytics</span></span>
             <i class="bi bi-chevron-down sec-chevron sb-label"></i>
@@ -232,6 +270,20 @@
             </div>
         </div>
         @endif
+
+        {{-- GENERAL LEDGER --}}
+        @php $glActive = request()->routeIs('gl.*'); @endphp
+        <button class="sec-group-btn" onclick="toggleGroup('grpGL',this)" id="btnGrpGL">
+            <span class="sec-group-label"><i class="bi bi-journal-text me-1"></i><span class="sb-label">General Ledger</span></span>
+            <i class="bi bi-chevron-down sec-chevron sb-label"></i>
+        </button>
+        <div class="sec-group-body {{ $glActive ? 'show' : '' }}" id="grpGL">
+            <a href="{{ route('gl.chart-of-accounts') }}" class="direct-lnk {{ request()->routeIs('gl.chart-of-accounts') ? 'active' : '' }}"><i class="bi bi-list-columns"></i><span class="sb-label">Chart of Accounts</span></a>
+            <a href="{{ route('gl.entries') }}" class="direct-lnk {{ request()->routeIs('gl.entries*') ? 'active' : '' }}"><i class="bi bi-receipt"></i><span class="sb-label">Journal Entries</span></a>
+            <a href="{{ route('gl.trial-balance') }}" class="direct-lnk {{ request()->routeIs('gl.trial-balance') ? 'active' : '' }}"><i class="bi bi-bar-chart-steps"></i><span class="sb-label">Trial Balance</span></a>
+            <a href="{{ route('gl.ledger') }}" class="direct-lnk {{ request()->routeIs('gl.ledger') ? 'active' : '' }}"><i class="bi bi-book"></i><span class="sb-label">General Ledger</span></a>
+        </div>
+
         @php $opsActive = request()->routeIs('eod.*')||request()->routeIs('branches.*')||request()->routeIs('audit-log.*'); @endphp
         <button class="sec-group-btn" onclick="toggleGroup('grpOps',this)" id="btnGrpOps">
             <span class="sec-group-label"><i class="bi bi-gear-wide-connected me-1"></i><span class="sb-label">Operations</span></span>
@@ -242,7 +294,10 @@
             <a href="{{ route('branches.index') }}" class="direct-lnk {{ request()->routeIs('branches.*') ? 'active' : '' }}"><i class="bi bi-building"></i><span class="sb-label">Branches</span></a>
             <a href="{{ route('audit-log.index') }}" class="direct-lnk {{ request()->routeIs('audit-log.*') ? 'active' : '' }}"><i class="bi bi-shield-lock"></i><span class="sb-label">Audit Trail</span></a>
         </div>
+
+        {{-- HR & ADMIN GROUP --}}
         @if(auth()->user()?->hasFeature('employees') || auth()->user()?->hasFeature('expenses') || auth()->user()?->hasFeature('users'))
+        @php $hrActive = request()->routeIs('employees.*') || request()->routeIs('expenses.*') || request()->routeIs('users.*'); @endphp
         <button class="sec-group-btn" onclick="toggleGroup('grpHR',this)" id="btnGrpHR">
             <span class="sec-group-label"><i class="bi bi-person-workspace me-1"></i><span class="sb-label">HR & Admin</span></span>
             <i class="bi bi-chevron-down sec-chevron sb-label"></i>
@@ -279,6 +334,8 @@
             @endif
         </div>
         @endif
+
+        {{-- SUPER ADMIN GROUP --}}
         @if(auth()->user()?->isSuperAdmin())
         <button class="sec-group-btn" onclick="toggleGroup('grpSA',this)" id="btnGrpSA" style="color:#FFD700;border-color:rgba(255,215,0,.2)">
             <span class="sec-group-label"><i class="bi bi-shield-fill-check me-1"></i><span class="sb-label">Super Admin</span></span>
@@ -295,6 +352,8 @@
         @endif
     </nav>
 </div>
+
+<!-- MAIN CONTENT -->
 <div class="main-content" id="mainContent">
     <div class="topbar">
         <div class="d-flex align-items-center gap-2">
@@ -346,6 +405,7 @@
         @yield('content')
     </div>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 function toggleAcc(id, btn) {
@@ -354,15 +414,20 @@ function toggleAcc(id, btn) {
     el.classList.toggle('d-none', !hidden);
     btn.classList.toggle('open', hidden);
 }
+
+// Section group collapse/expand
 function toggleGroup(id, btn) {
     const body = document.getElementById(id);
     const collapsed = btn.classList.contains('collapsed');
     body.classList.toggle('sg-hidden', !collapsed);
     btn.classList.toggle('collapsed', !collapsed);
+    // save state
     const states = JSON.parse(localStorage.getItem('sgStates') || '{}');
     states[id] = !collapsed ? 'closed' : 'open';
     localStorage.setItem('sgStates', JSON.stringify(states));
 }
+
+// Init section groups on load
 document.addEventListener('DOMContentLoaded', () => {
     const states = JSON.parse(localStorage.getItem('sgStates') || '{}');
     document.querySelectorAll('.sec-group-btn').forEach(btn => {
@@ -371,18 +436,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!body) return;
         const hasActive = body.querySelector('.active, .open') !== null;
         const savedState = states[bodyId];
+        // Keep open if: has active item, or saved as open, or no saved state
         if (!hasActive && savedState === 'closed') {
             body.classList.add('sg-hidden');
             btn.classList.add('collapsed');
         }
     });
 });
+
 const sbToggle = document.getElementById('sbToggle');
 const overlay  = document.getElementById('sbOverlay');
 const isMobile = () => window.innerWidth < 768;
+
+// Desktop: restore collapse state
 if (!isMobile() && localStorage.getItem('sbCol') === '1') {
     document.body.classList.add('sb-col');
 }
+
 sbToggle.addEventListener('click', () => {
     if (isMobile()) {
         document.body.classList.toggle('sb-open');
@@ -391,14 +461,20 @@ sbToggle.addEventListener('click', () => {
         localStorage.setItem('sbCol', document.body.classList.contains('sb-col') ? '1' : '0');
     }
 });
+
+// Close sidebar on overlay click (mobile)
 overlay.addEventListener('click', () => {
     document.body.classList.remove('sb-open');
 });
+
+// Close sidebar when a nav link is clicked on mobile
 document.querySelectorAll('.sidebar .child-lnk, .sidebar .direct-lnk').forEach(link => {
     link.addEventListener('click', () => {
         if (isMobile()) document.body.classList.remove('sb-open');
     });
 });
+
+// On resize: clean up mobile state
 window.addEventListener('resize', () => {
     if (!isMobile()) document.body.classList.remove('sb-open');
 });

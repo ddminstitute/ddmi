@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Account;
 use App\Models\Transaction;
 use App\Services\NotificationService;
+use App\Services\GeneralLedgerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -37,8 +38,8 @@ class TransactionController extends Controller
     public function deposit(Request $request)
     {
         $data = $request->validate([
-            'account_id'  => 'required|exists:accounts,id',
-            'amount'      => 'required|numeric|min:1',
+            'account_id' => 'required|exists:accounts,id',
+            'amount' => 'required|numeric|min:1',
             'description' => 'nullable|string|max:255',
         ]);
 
@@ -52,20 +53,23 @@ class TransactionController extends Controller
             $balanceBefore = $account->balance;
             $account->increment('balance', $data['amount']);
             $txn = Transaction::create([
-                'account_id'       => $account->id,
+                'account_id' => $account->id,
                 'transaction_type' => 'deposit',
-                'amount'           => $data['amount'],
-                'balance_before'   => $balanceBefore,
-                'balance_after'    => $account->fresh()->balance,
-                'description'      => $data['description'] ?? 'Cash deposit',
+                'amount' => $data['amount'],
+                'balance_before' => $balanceBefore,
+                'balance_after' => $account->fresh()->balance,
+                'description' => $data['description'] ?? 'Cash deposit',
                 'reference_number' => Transaction::generateReference(),
-                'status'           => 'completed',
+                'status' => 'completed',
             ]);
         });
-        if ($txn) app(NotificationService::class)->transactionAlert($txn->load('account.user'));
+        if ($txn) {
+            app(NotificationService::class)->transactionAlert($txn->load('account.user'));
+            app(GeneralLedgerService::class)->postTransaction($txn);
+        }
 
         return redirect()->route('transactions.index')
-            ->with('success', "₹{$data['amount']} deposited successfully.");
+            ->with('success', "Deposit of ₹{$data['amount']} completed successfully.");
     }
 
     public function withdrawForm()
@@ -77,8 +81,8 @@ class TransactionController extends Controller
     public function withdraw(Request $request)
     {
         $data = $request->validate([
-            'account_id'  => 'required|exists:accounts,id',
-            'amount'      => 'required|numeric|min:1',
+            'account_id' => 'required|exists:accounts,id',
+            'amount' => 'required|numeric|min:1',
             'description' => 'nullable|string|max:255',
         ]);
 
@@ -95,20 +99,23 @@ class TransactionController extends Controller
             $balanceBefore = $account->balance;
             $account->decrement('balance', $data['amount']);
             $txn = Transaction::create([
-                'account_id'       => $account->id,
+                'account_id' => $account->id,
                 'transaction_type' => 'withdrawal',
-                'amount'           => $data['amount'],
-                'balance_before'   => $balanceBefore,
-                'balance_after'    => $account->fresh()->balance,
-                'description'      => $data['description'] ?? 'Cash withdrawal',
+                'amount' => $data['amount'],
+                'balance_before' => $balanceBefore,
+                'balance_after' => $account->fresh()->balance,
+                'description' => $data['description'] ?? 'Cash withdrawal',
                 'reference_number' => Transaction::generateReference(),
-                'status'           => 'completed',
+                'status' => 'completed',
             ]);
         });
-        if ($txn) app(NotificationService::class)->transactionAlert($txn->load('account.user'));
+        if ($txn) {
+            app(NotificationService::class)->transactionAlert($txn->load('account.user'));
+            app(GeneralLedgerService::class)->postTransaction($txn);
+        }
 
         return redirect()->route('transactions.index')
-            ->with('success', "₹{$data['amount']} withdrawn successfully.");
+            ->with('success', "Withdrawal of ₹{$data['amount']} completed successfully.");
     }
 
     public function transferForm()
@@ -121,13 +128,13 @@ class TransactionController extends Controller
     {
         $data = $request->validate([
             'from_account_id' => 'required|exists:accounts,id',
-            'to_account_id'   => 'required|exists:accounts,id|different:from_account_id',
-            'amount'          => 'required|numeric|min:1',
-            'description'     => 'nullable|string|max:255',
+            'to_account_id' => 'required|exists:accounts,id|different:from_account_id',
+            'amount' => 'required|numeric|min:1',
+            'description' => 'nullable|string|max:255',
         ]);
 
         $from = Account::findOrFail($data['from_account_id']);
-        $to   = Account::findOrFail($data['to_account_id']);
+        $to = Account::findOrFail($data['to_account_id']);
 
         if ($from->status !== 'active' || $to->status !== 'active') {
             return back()->with('error', 'One or both accounts are not active.');
@@ -137,33 +144,33 @@ class TransactionController extends Controller
         }
 
         DB::transaction(function () use ($from, $to, $data) {
-            $desc       = $data['description'] ?? 'Fund transfer';
+            $desc = $data['description'] ?? 'Fund transfer';
             $fromBefore = $from->balance;
             $from->decrement('balance', $data['amount']);
             Transaction::create([
-                'account_id'        => $from->id,
-                'transaction_type'  => 'transfer_out',
-                'amount'            => $data['amount'],
-                'balance_before'    => $fromBefore,
-                'balance_after'     => $from->fresh()->balance,
-                'description'       => $desc . " to {$to->account_number}",
-                'reference_number'  => Transaction::generateReference(),
-                'related_account_id'=> $to->id,
-                'status'            => 'completed',
+                'account_id' => $from->id,
+                'transaction_type' => 'transfer_out',
+                'amount' => $data['amount'],
+                'balance_before' => $fromBefore,
+                'balance_after' => $from->fresh()->balance,
+                'description' => $desc . " to {$to->account_number}",
+                'reference_number' => Transaction::generateReference(),
+                'related_account_id' => $to->id,
+                'status' => 'completed',
             ]);
 
             $toBefore = $to->balance;
             $to->increment('balance', $data['amount']);
             Transaction::create([
-                'account_id'        => $to->id,
-                'transaction_type'  => 'transfer_in',
-                'amount'            => $data['amount'],
-                'balance_before'    => $toBefore,
-                'balance_after'     => $to->fresh()->balance,
-                'description'       => $desc . " from {$from->account_number}",
-                'reference_number'  => Transaction::generateReference(),
-                'related_account_id'=> $from->id,
-                'status'            => 'completed',
+                'account_id' => $to->id,
+                'transaction_type' => 'transfer_in',
+                'amount' => $data['amount'],
+                'balance_before' => $toBefore,
+                'balance_after' => $to->fresh()->balance,
+                'description' => $desc . " from {$from->account_number}",
+                'reference_number' => Transaction::generateReference(),
+                'related_account_id' => $from->id,
+                'status' => 'completed',
             ]);
         });
 
