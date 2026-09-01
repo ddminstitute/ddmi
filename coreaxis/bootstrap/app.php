@@ -18,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'session.timeout' => \App\Http\Middleware\SessionTimeout::class,
             'audit.login'     => \App\Http\Middleware\AuditLogin::class,
         ]);
+        // Apply session timeout to all web routes after auth
         $middleware->appendToGroup('web', \App\Http\Middleware\SessionTimeout::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

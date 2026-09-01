@@ -28,7 +28,6 @@ return new class extends Migration {
             $table->text('notes')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
-
             $table->foreign('account_id')->references('id')->on('accounts')->onDelete('restrict');
         });
     }
