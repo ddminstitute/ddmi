@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\ActivityLog;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -12,19 +13,11 @@ use Illuminate\Validation\ValidationException;
 
 class LoginRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
     public function authorize(): bool
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
@@ -33,31 +26,45 @@ class LoginRequest extends FormRequest
         ];
     }
 
-    /**
-     * Attempt to authenticate the request's credentials.
-     *
-     * @throws ValidationException
-     */
     public function authenticate(): void
     {
         $this->ensureIsNotRateLimited();
 
+        // Check if account is locked out via locked_until column
+        $user = \App\Models\User::where('email', $this->email)->first();
+        if ($user && $user->locked_until && now()->lt($user->locked_until)) {
+            $minutes = now()->diffInMinutes($user->locked_until, false);
+            throw ValidationException::withMessages([
+                'email' => "Account locked. Try again in {$minutes} minute(s).",
+            ]);
+        }
+
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+
+            // Increment failed_login_attempts and lock after 5 failures
+            if ($user) {
+                $attempts = ($user->failed_login_attempts ?? 0) + 1;
+                $updates = ['failed_login_attempts' => $attempts, 'last_failed_login_at' => now()];
+                if ($attempts >= 5) {
+                    $updates['locked_until'] = now()->addMinutes(30);
+                }
+                $user->update($updates);
+            }
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
 
+        // Reset on successful login
+        if ($user) {
+            $user->update(['failed_login_attempts' => 0, 'locked_until' => null, 'last_login_at' => now(), 'last_login_ip' => $this->ip()]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 
-    /**
-     * Ensure the login request is not rate limited.
-     *
-     * @throws ValidationException
-     */
     public function ensureIsNotRateLimited(): void
     {
         if (! RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
@@ -76,9 +83,6 @@ class LoginRequest extends FormRequest
         ]);
     }
 
-    /**
-     * Get the rate limiting throttle key for the request.
-     */
     public function throttleKey(): string
     {
         return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
