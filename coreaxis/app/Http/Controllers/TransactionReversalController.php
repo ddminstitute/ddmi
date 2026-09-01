@@ -27,33 +27,33 @@ class TransactionReversalController extends Controller
                 if ($account->balance < $transaction->amount) {
                     throw new \Exception('Insufficient balance to reverse this deposit.');
                 }
-                $before = $account->balance;
+                $before  = $account->balance;
                 $account->decrement('balance', $transaction->amount);
                 $revType = 'withdrawal';
             } else {
-                $before = $account->balance;
+                $before  = $account->balance;
                 $account->increment('balance', $transaction->amount);
                 $revType = 'deposit';
             }
 
             $reversal = Transaction::create([
-                'account_id'              => $account->id,
-                'transaction_type'        => $revType,
-                'transaction_mode'        => 'internal',
-                'amount'                  => $transaction->amount,
-                'balance_before'          => $before,
-                'balance_after'           => $account->fresh()->balance,
-                'description'             => "REVERSAL of {$transaction->reference_number}: {$request->reversal_reason}",
-                'reference_number'        => Transaction::generateReference(),
-                'status'                  => 'completed',
-                'parent_transaction_id'   => $transaction->id,
+                'account_id'            => $account->id,
+                'transaction_type'      => $revType,
+                'transaction_mode'      => 'internal',
+                'amount'                => $transaction->amount,
+                'balance_before'        => $before,
+                'balance_after'         => $account->fresh()->balance,
+                'description'           => "REVERSAL of {$transaction->reference_number}: {$request->reversal_reason}",
+                'reference_number'      => Transaction::generateReference(),
+                'status'                => 'completed',
+                'parent_transaction_id' => $transaction->id,
             ]);
 
             $transaction->update([
-                'is_reversed'      => true,
-                'reversed_by'      => auth()->id(),
-                'reversed_at'      => now(),
-                'reversal_reason'  => $request->reversal_reason,
+                'is_reversed'     => true,
+                'reversed_by'     => auth()->id(),
+                'reversed_at'     => now(),
+                'reversal_reason' => $request->reversal_reason,
             ]);
 
             ActivityLog::record('updated', "Transaction {$transaction->reference_number} reversed. Reason: {$request->reversal_reason}. Reversal ref: {$reversal->reference_number}", $transaction);

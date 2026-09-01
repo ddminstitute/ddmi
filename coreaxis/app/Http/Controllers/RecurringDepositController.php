@@ -41,7 +41,7 @@ class RecurringDepositController extends Controller
         $account      = Account::findOrFail($data['account_id']);
         $totalDeposit = $data['monthly_installment'] * $data['tenure_months'];
         $r            = $data['interest_rate'] / 100 / 12;
-        $maturity = $r > 0
+        $maturity     = $r > 0
             ? round($data['monthly_installment'] * ((pow(1+$r,$data['tenure_months'])-1)/$r) * (1+$r), 2)
             : $totalDeposit;
         $startDate    = Carbon::parse($data['start_date']);
@@ -49,17 +49,17 @@ class RecurringDepositController extends Controller
 
         DB::transaction(function() use ($account, $data, $maturity, $maturityDate, $startDate) {
             $rd = RecurringDeposit::create([
-                'rd_number'            => RecurringDeposit::generateRdNumber(),
-                'customer_id'          => $account->customer_id,
-                'account_id'           => $account->id,
-                'monthly_installment'  => $data['monthly_installment'],
-                'interest_rate'        => $data['interest_rate'],
-                'tenure_months'        => $data['tenure_months'],
-                'start_date'           => $data['start_date'],
-                'maturity_date'        => $maturityDate->toDateString(),
-                'maturity_amount'      => $maturity,
-                'next_due_date'        => $startDate->toDateString(),
-                'created_by'           => auth()->id(),
+                'rd_number'           => RecurringDeposit::generateRdNumber(),
+                'customer_id'         => $account->customer_id,
+                'account_id'          => $account->id,
+                'monthly_installment' => $data['monthly_installment'],
+                'interest_rate'       => $data['interest_rate'],
+                'tenure_months'       => $data['tenure_months'],
+                'start_date'          => $data['start_date'],
+                'maturity_date'       => $maturityDate->toDateString(),
+                'maturity_amount'     => $maturity,
+                'next_due_date'       => $startDate->toDateString(),
+                'created_by'          => auth()->id(),
             ]);
 
             for ($i = 1; $i <= $data['tenure_months']; $i++) {
@@ -106,9 +106,9 @@ class RecurringDepositController extends Controller
             ]);
             $installment->update(['status' => 'paid','paid_date' => today()->toDateString(),'reference_number' => $ref]);
 
-            $paid     = $recurringDeposit->installments()->where('status','paid')->count();
-            $deposited= $recurringDeposit->monthly_installment * $paid;
-            $next     = $recurringDeposit->installments()->where('status','pending')->orderBy('due_date')->first();
+            $paid      = $recurringDeposit->installments()->where('status','paid')->count();
+            $deposited = $recurringDeposit->monthly_installment * $paid;
+            $next      = $recurringDeposit->installments()->where('status','pending')->orderBy('due_date')->first();
             $isComplete = $paid >= $recurringDeposit->tenure_months;
 
             $recurringDeposit->update([

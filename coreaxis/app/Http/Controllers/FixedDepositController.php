@@ -18,8 +18,8 @@ class FixedDepositController extends Controller
         if ($request->status) $query->where('status', $request->status);
         $fds = $query->latest()->paginate(20)->withQueryString();
         $stats = [
-            'active'  => FixedDeposit::where('status','active')->count(),
-            'matured' => FixedDeposit::where('status','matured')->count(),
+            'active'       => FixedDeposit::where('status','active')->count(),
+            'matured'      => FixedDeposit::where('status','matured')->count(),
             'total_amount' => FixedDeposit::where('status','active')->sum('principal_amount'),
         ];
         return view('fixed-deposits.index', compact('fds','stats'));
@@ -27,7 +27,7 @@ class FixedDepositController extends Controller
 
     public function create()
     {
-        $accounts = Account::where('status','active')->with('user','customer')->get();
+        $accounts  = Account::where('status','active')->with('user','customer')->get();
         $customers = Customer::where('status','active')->get();
         return view('fixed-deposits.create', compact('accounts','customers'));
     }
@@ -35,13 +35,13 @@ class FixedDepositController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'account_id'      => 'required|exists:accounts,id',
-            'principal_amount'=> 'required|numeric|min:500',
-            'interest_rate'   => 'required|numeric|min:0|max:20',
-            'tenure_months'   => 'required|integer|min:1|max:120',
-            'compounding'     => 'required|in:monthly,quarterly,half_yearly,yearly,on_maturity',
-            'start_date'      => 'required|date',
-            'auto_renew'      => 'nullable|boolean',
+            'account_id'       => 'required|exists:accounts,id',
+            'principal_amount' => 'required|numeric|min:500',
+            'interest_rate'    => 'required|numeric|min:0|max:20',
+            'tenure_months'    => 'required|integer|min:1|max:120',
+            'compounding'      => 'required|in:monthly,quarterly,half_yearly,yearly,on_maturity',
+            'start_date'       => 'required|date',
+            'auto_renew'       => 'nullable|boolean',
         ]);
 
         $account = Account::findOrFail($data['account_id']);
@@ -49,7 +49,7 @@ class FixedDepositController extends Controller
             return back()->with('error','Insufficient balance in account.')->withInput();
         }
 
-        $maturity = FixedDeposit::calculateMaturity($data['principal_amount'], $data['interest_rate'], $data['tenure_months'], $data['compounding']);
+        $maturity     = FixedDeposit::calculateMaturity($data['principal_amount'], $data['interest_rate'], $data['tenure_months'], $data['compounding']);
         $maturityDate = Carbon::parse($data['start_date'])->addMonths($data['tenure_months']);
 
         DB::transaction(function() use ($account, $data, $maturity, $maturityDate) {
@@ -68,20 +68,20 @@ class FixedDepositController extends Controller
             ]);
 
             $fd = FixedDeposit::create([
-                'fd_number'         => FixedDeposit::generateFdNumber(),
-                'customer_id'       => $account->customer_id,
-                'account_id'        => $account->id,
-                'principal_amount'  => $data['principal_amount'],
-                'interest_rate'     => $data['interest_rate'],
-                'compounding'       => $data['compounding'],
-                'tenure_months'     => $data['tenure_months'],
-                'start_date'        => $data['start_date'],
-                'maturity_date'     => $maturityDate->toDateString(),
-                'maturity_amount'   => $maturity,
-                'interest_earned'   => 0,
-                'status'            => 'active',
-                'auto_renew'        => request()->boolean('auto_renew'),
-                'created_by'        => auth()->id(),
+                'fd_number'        => FixedDeposit::generateFdNumber(),
+                'customer_id'      => $account->customer_id,
+                'account_id'       => $account->id,
+                'principal_amount' => $data['principal_amount'],
+                'interest_rate'    => $data['interest_rate'],
+                'compounding'      => $data['compounding'],
+                'tenure_months'    => $data['tenure_months'],
+                'start_date'       => $data['start_date'],
+                'maturity_date'    => $maturityDate->toDateString(),
+                'maturity_amount'  => $maturity,
+                'interest_earned'  => 0,
+                'status'           => 'active',
+                'auto_renew'       => $request->boolean('auto_renew'),
+                'created_by'       => auth()->id(),
             ]);
 
             ActivityLog::record('created', "FD {$fd->fd_number} opened for ₹" . number_format($data['principal_amount'],2), $fd);
@@ -109,8 +109,8 @@ class FixedDepositController extends Controller
         DB::transaction(function() use ($fixedDeposit, $request, $isPremature) {
             $payoutAmount = $fixedDeposit->maturity_amount;
             if ($isPremature) {
-                $interest = $fixedDeposit->maturity_amount - $fixedDeposit->principal_amount;
-                $penalty  = $interest * ($fixedDeposit->premature_penalty_percent / 100);
+                $interest     = $fixedDeposit->maturity_amount - $fixedDeposit->principal_amount;
+                $penalty      = $interest * ($fixedDeposit->premature_penalty_percent / 100);
                 $payoutAmount = $fixedDeposit->maturity_amount - $penalty;
             }
 
@@ -130,10 +130,10 @@ class FixedDepositController extends Controller
             ]);
 
             $fixedDeposit->update([
-                'status'           => $isPremature ? 'premature_closed' : 'closed',
-                'closure_reason'   => $request->closure_reason,
-                'interest_earned'  => $payoutAmount - $fixedDeposit->principal_amount,
-                'closed_at'        => now(),
+                'status'          => $isPremature ? 'premature_closed' : 'closed',
+                'closure_reason'  => $request->closure_reason,
+                'interest_earned' => $payoutAmount - $fixedDeposit->principal_amount,
+                'closed_at'       => now(),
             ]);
 
             ActivityLog::record('updated', "FD {$fixedDeposit->fd_number} closed. Payout: ₹" . number_format($payoutAmount,2), $fixedDeposit);

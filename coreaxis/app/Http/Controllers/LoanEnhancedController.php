@@ -16,7 +16,7 @@ class LoanEnhancedController extends Controller
 {
     public function guarantors(Loan $loan)
     {
-        $guarantors = $loan->guarantors ?? LoanGuarantor::where('loan_id',$loan->id)->get();
+        $guarantors = LoanGuarantor::where('loan_id',$loan->id)->get();
         return view('loans.guarantors', compact('loan','guarantors'));
     }
 
@@ -52,11 +52,11 @@ class LoanEnhancedController extends Controller
     public function addCollateral(Request $request, Loan $loan)
     {
         $data = $request->validate([
-            'collateral_type'    => 'required|in:gold,property,vehicle,fd,other',
-            'description'        => 'required|string|max:255',
-            'estimated_value'    => 'required|numeric|min:0',
-            'valuation_date'     => 'nullable|date',
-            'charge_created_date'=> 'nullable|date',
+            'collateral_type'     => 'required|in:gold,property,vehicle,fd,other',
+            'description'         => 'required|string|max:255',
+            'estimated_value'     => 'required|numeric|min:0',
+            'valuation_date'      => 'nullable|date',
+            'charge_created_date' => 'nullable|date',
         ]);
         $data['loan_id'] = $loan->id;
         $c = LoanCollateral::create($data);
@@ -68,7 +68,7 @@ class LoanEnhancedController extends Controller
     {
         if ($loan->status !== 'active') abort(400,'Loan is not active.');
         $foreclosureChargePercent = 2;
-        $charges = round($loan->outstanding_amount * $foreclosureChargePercent / 100, 2);
+        $charges      = round($loan->outstanding_amount * $foreclosureChargePercent / 100, 2);
         $totalPayable = round($loan->outstanding_amount + $charges, 2);
         return view('loans.foreclosure', compact('loan','charges','totalPayable','foreclosureChargePercent'));
     }
@@ -78,9 +78,9 @@ class LoanEnhancedController extends Controller
         if ($loan->status !== 'active') return back()->with('error','Loan is not active.');
         $request->validate(['confirm' => 'required|accepted']);
 
-        $charges = round($loan->outstanding_amount * 2 / 100, 2);
+        $charges      = round($loan->outstanding_amount * 2 / 100, 2);
         $totalPayable = $loan->outstanding_amount + $charges;
-        $account = $loan->account;
+        $account      = $loan->account;
 
         if ($account->balance < $totalPayable) {
             return back()->with('error','Insufficient balance. Need ₹'.number_format($totalPayable,2));
@@ -103,17 +103,17 @@ class LoanEnhancedController extends Controller
 
             EmiSchedule::where('loan_id',$loan->id)->where('status','pending')->update(['status' => 'waived']);
             $loan->update([
-                'status'               => 'closed',
-                'paid_amount'          => $loan->total_amount,
-                'outstanding_amount'   => 0,
-                'foreclosure_date'     => today()->toDateString(),
-                'foreclosure_amount'   => $loan->outstanding_amount,
-                'foreclosure_charges'  => $charges,
+                'status'              => 'closed',
+                'paid_amount'         => $loan->total_amount,
+                'outstanding_amount'  => 0,
+                'foreclosure_date'    => today()->toDateString(),
+                'foreclosure_amount'  => $loan->outstanding_amount,
+                'foreclosure_charges' => $charges,
             ]);
             ActivityLog::record('updated', "Loan {$loan->loan_number} foreclosed. Total paid: ₹".number_format($totalPayable,2), $loan);
         });
 
-        return redirect()->route('loans.show',$loan)->with('success','Loan foreclosed successfully. No-dues certificate can be printed.');
+        return redirect()->route('loans.show',$loan)->with('success','Loan foreclosed successfully.');
     }
 
     public function restructureForm(Loan $loan)
@@ -131,39 +131,39 @@ class LoanEnhancedController extends Controller
         ]);
 
         DB::transaction(function() use ($loan, $data) {
-            $newRate    = $data['new_interest_rate'] ?? $loan->interest_rate;
-            $newEmi     = Loan::calculateEmi($loan->outstanding_amount, $newRate, $data['new_tenure_months']);
-            $newTotal   = round($newEmi * $data['new_tenure_months'], 2);
+            $newRate  = $data['new_interest_rate'] ?? $loan->interest_rate;
+            $newEmi   = Loan::calculateEmi($loan->outstanding_amount, $newRate, $data['new_tenure_months']);
+            $newTotal = round($newEmi * $data['new_tenure_months'], 2);
 
             EmiSchedule::where('loan_id',$loan->id)->where('status','pending')->delete();
-            $r = $newRate / 12 / 100;
+            $r           = $newRate / 12 / 100;
             $outstanding = $loan->outstanding_amount;
             for ($i = 1; $i <= $data['new_tenure_months']; $i++) {
-                $interest = round($outstanding * $r, 2);
+                $interest  = round($outstanding * $r, 2);
                 $principal = round($newEmi - $interest, 2);
                 $outstanding = round($outstanding - $principal, 2);
                 EmiSchedule::create([
-                    'loan_id'              => $loan->id,
-                    'installment_number'   => $i,
-                    'due_date'             => now()->addMonths($i)->toDateString(),
-                    'emi_amount'           => $newEmi,
-                    'principal_component'  => $principal,
-                    'interest_component'   => $interest,
-                    'outstanding_balance'  => max(0, $outstanding),
-                    'status'               => 'pending',
+                    'loan_id'             => $loan->id,
+                    'installment_number'  => $i,
+                    'due_date'            => now()->addMonths($i)->toDateString(),
+                    'emi_amount'          => $newEmi,
+                    'principal_component' => $principal,
+                    'interest_component'  => $interest,
+                    'outstanding_balance' => max(0, $outstanding),
+                    'status'              => 'pending',
                 ]);
             }
 
             $loan->update([
-                'tenure_months'     => $data['new_tenure_months'],
-                'interest_rate'     => $newRate,
-                'emi_amount'        => $newEmi,
-                'monthly_emi'       => $newEmi,
-                'total_amount'      => $loan->paid_amount + $newTotal,
-                'outstanding_amount'=> $loan->outstanding_amount,
-                'restructured_at'   => now(),
-                'restructure_reason'=> $data['reason'],
-                'is_npa'            => false,
+                'tenure_months'      => $data['new_tenure_months'],
+                'interest_rate'      => $newRate,
+                'emi_amount'         => $newEmi,
+                'monthly_emi'        => $newEmi,
+                'total_amount'       => $loan->paid_amount + $newTotal,
+                'outstanding_amount' => $loan->outstanding_amount,
+                'restructured_at'    => now(),
+                'restructure_reason' => $data['reason'],
+                'is_npa'             => false,
             ]);
             ActivityLog::record('updated', "Loan {$loan->loan_number} restructured. New EMI: ₹".number_format($newEmi,2)." x {$data['new_tenure_months']} months", $loan);
         });

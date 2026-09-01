@@ -23,11 +23,11 @@ class ReportEnhancedController extends Controller
 
         if ($request->bucket) {
             $buckets = [
-                '30'  => [1,30],
-                '60'  => [31,60],
-                '90'  => [61,90],
-                '180' => [91,180],
-                '180+'=> [181,9999],
+                '30'   => [1,30],
+                '60'   => [31,60],
+                '90'   => [61,90],
+                '180'  => [91,180],
+                '180+' => [181,9999],
             ];
             if (isset($buckets[$request->bucket])) {
                 [$min,$max] = $buckets[$request->bucket];
@@ -35,15 +35,15 @@ class ReportEnhancedController extends Controller
             }
         }
 
-        $loans = $query->latest()->paginate(25)->withQueryString();
+        $loans   = $query->latest()->paginate(25)->withQueryString();
         $summary = [
-            'total_npa_accounts'  => Loan::where('is_npa',true)->count(),
-            'total_npa_amount'    => Loan::where('is_npa',true)->sum('outstanding_amount'),
-            'overdue_30'          => Loan::where('overdue_days','>=',1)->where('overdue_days','<=',30)->count(),
-            'overdue_60'          => Loan::where('overdue_days','>=',31)->where('overdue_days','<=',60)->count(),
-            'overdue_90'          => Loan::where('overdue_days','>=',61)->where('overdue_days','<=',90)->count(),
-            'overdue_90_plus'     => Loan::where('overdue_days','>=',91)->count(),
-            'total_penalties'     => Loan::sum('penalty_amount'),
+            'total_npa_accounts' => Loan::where('is_npa',true)->count(),
+            'total_npa_amount'   => Loan::where('is_npa',true)->sum('outstanding_amount'),
+            'overdue_30'         => Loan::where('overdue_days','>=',1)->where('overdue_days','<=',30)->count(),
+            'overdue_60'         => Loan::where('overdue_days','>=',31)->where('overdue_days','<=',60)->count(),
+            'overdue_90'         => Loan::where('overdue_days','>=',61)->where('overdue_days','<=',90)->count(),
+            'overdue_90_plus'    => Loan::where('overdue_days','>=',91)->count(),
+            'total_penalties'    => Loan::sum('penalty_amount'),
         ];
         return view('reports.npa', compact('loans','summary'));
     }
@@ -74,15 +74,15 @@ class ReportEnhancedController extends Controller
         [$year, $mon] = explode('-', $month);
 
         $data = [
-            'month'             => $month,
-            'total_deposits'    => Account::sum('balance'),
+            'month'                => $month,
+            'total_deposits'       => Account::sum('balance'),
             'total_loan_portfolio' => Loan::where('status','active')->sum('outstanding_amount'),
-            'npa_amount'        => Loan::where('is_npa',true)->sum('outstanding_amount'),
-            'new_loans'         => Loan::whereYear('created_at',$year)->whereMonth('created_at',$mon)->count(),
-            'new_loans_amount'  => Loan::whereYear('created_at',$year)->whereMonth('created_at',$mon)->sum('amount'),
-            'accounts_opened'   => Account::whereYear('created_at',$year)->whereMonth('created_at',$mon)->count(),
-            'fd_portfolio'      => FixedDeposit::where('status','active')->sum('principal_amount'),
-            'rd_portfolio'      => RecurringDeposit::where('status','active')->sum('total_deposited'),
+            'npa_amount'           => Loan::where('is_npa',true)->sum('outstanding_amount'),
+            'new_loans'            => Loan::whereYear('created_at',$year)->whereMonth('created_at',$mon)->count(),
+            'new_loans_amount'     => Loan::whereYear('created_at',$year)->whereMonth('created_at',$mon)->sum('amount'),
+            'accounts_opened'      => Account::whereYear('created_at',$year)->whereMonth('created_at',$mon)->count(),
+            'fd_portfolio'         => FixedDeposit::where('status','active')->sum('principal_amount'),
+            'rd_portfolio'         => RecurringDeposit::where('status','active')->sum('total_deposited'),
         ];
 
         if ($request->format === 'csv') {
@@ -94,7 +94,7 @@ class ReportEnhancedController extends Controller
 
     private function exportCsv(array $data, string $filename)
     {
-        $headers = ['Content-Type' => 'text/csv','Content-Disposition' => "attachment; filename={$filename}"];
+        $headers  = ['Content-Type' => 'text/csv','Content-Disposition' => "attachment; filename={$filename}"];
         $callback = function() use ($data) {
             $f = fopen('php://output','w');
             fputcsv($f, ['Parameter','Value']);
