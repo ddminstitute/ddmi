@@ -41,7 +41,7 @@ class DemandDraftController extends Controller
         $account = Account::findOrFail($data['account_id']);
 
         if ($account->balance < $totalDebit) {
-            return back()->with('error','Insufficient balance (amount + charges ₹'.number_format($charges,2).').' )->withInput();
+            return back()->with('error','Insufficient balance (amount + charges ₹'.number_format($charges,2).').')->withInput();
         }
 
         DB::transaction(function() use ($account, $data, $charges, $totalDebit) {
@@ -56,7 +56,7 @@ class DemandDraftController extends Controller
                 'amount'           => $totalDebit,
                 'balance_before'   => $before,
                 'balance_after'    => $account->fresh()->balance,
-                'description'      => strtoupper(str_replace('_',' ',$data['instrument_type'])). " - {$ddNum} to {$data['payee_name']}",
+                'description'      => strtoupper(str_replace('_',' ',$data['instrument_type']))." - {$ddNum} to {$data['payee_name']}",
                 'reference_number' => Transaction::generateReference(),
                 'status'           => 'completed',
             ]);

@@ -60,7 +60,6 @@ class ExecuteStandingInstructions extends Command
                         ]);
                     }
 
-                    // Calculate next execution date
                     $next = match($si->frequency) {
                         'weekly'    => $today->copy()->addWeek(),
                         'monthly'   => $today->copy()->addMonth(),

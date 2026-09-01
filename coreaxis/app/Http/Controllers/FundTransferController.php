@@ -53,7 +53,7 @@ class FundTransferController extends Controller
         $totalDebit = $data['amount'] + $charges;
 
         if ($account->balance < $totalDebit) {
-            return back()->with('error','Insufficient balance (including charges ₹'.number_format($charges,2).').' )->withInput();
+            return back()->with('error','Insufficient balance (including charges ₹'.number_format($charges,2).').')->withInput();
         }
 
         DB::transaction(function() use ($account, $data, $charges, $totalDebit) {
