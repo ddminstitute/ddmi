@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Account;
 use App\Models\Transaction;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -46,10 +47,11 @@ class TransactionController extends Controller
             return back()->with('error', 'Account is not active.');
         }
 
-        DB::transaction(function () use ($account, $data) {
+        $txn = null;
+        DB::transaction(function () use ($account, $data, &$txn) {
             $balanceBefore = $account->balance;
             $account->increment('balance', $data['amount']);
-            Transaction::create([
+            $txn = Transaction::create([
                 'account_id' => $account->id,
                 'transaction_type' => 'deposit',
                 'amount' => $data['amount'],
@@ -60,9 +62,10 @@ class TransactionController extends Controller
                 'status' => 'completed',
             ]);
         });
+        if ($txn) app(NotificationService::class)->transactionAlert($txn->load('account.user'));
 
         return redirect()->route('transactions.index')
-            ->with('success', "Deposit of ₹{$data['amount']} completed successfully.");
+            ->with('success', "₹{$data['amount']} deposit completed successfully.");
     }
 
     public function withdrawForm()
@@ -87,10 +90,11 @@ class TransactionController extends Controller
             return back()->with('error', 'Insufficient balance.');
         }
 
-        DB::transaction(function () use ($account, $data) {
+        $txn = null;
+        DB::transaction(function () use ($account, $data, &$txn) {
             $balanceBefore = $account->balance;
             $account->decrement('balance', $data['amount']);
-            Transaction::create([
+            $txn = Transaction::create([
                 'account_id' => $account->id,
                 'transaction_type' => 'withdrawal',
                 'amount' => $data['amount'],
@@ -101,9 +105,10 @@ class TransactionController extends Controller
                 'status' => 'completed',
             ]);
         });
+        if ($txn) app(NotificationService::class)->transactionAlert($txn->load('account.user'));
 
         return redirect()->route('transactions.index')
-            ->with('success', "Withdrawal of ₹{$data['amount']} completed successfully.");
+            ->with('success', "₹{$data['amount']} withdrawal completed successfully.");
     }
 
     public function transferForm()
@@ -163,6 +168,6 @@ class TransactionController extends Controller
         });
 
         return redirect()->route('transactions.index')
-            ->with('success', "Transfer of ₹{$data['amount']} completed successfully.");
+            ->with('success', "₹{$data['amount']} transfer completed successfully.");
     }
 }

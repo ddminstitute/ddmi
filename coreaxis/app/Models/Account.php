@@ -14,6 +14,7 @@ class Account extends Model
     protected $casts = ['balance' => 'decimal:2'];
 
     public function user() { return $this->belongsTo(User::class); }
+    public function nominees() { return $this->hasMany(\App\Models\Nominee::class); }
     public function customer() { return $this->belongsTo(Customer::class); }
     public function transactions() { return $this->hasMany(Transaction::class)->latest(); }
     public function loans() { return $this->hasMany(Loan::class); }
