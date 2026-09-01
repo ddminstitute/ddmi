@@ -19,7 +19,7 @@
     <tr>
         <td>{{ ucwords(str_replace('_',' ',$k)) }}</td>
         <td class="text-end fw-semibold font-monospace">
-            @if(is_numeric($v) && str_contains($k,'amount') || str_contains($k,'deposits') || str_contains($k,'portfolio') || str_contains($k,'loans'))
+            @if(is_numeric($v) && (str_contains($k,'amount') || str_contains($k,'deposits') || str_contains($k,'portfolio') || str_contains($k,'loans')))
                 ₹{{ number_format($v,2) }}
             @else
                 {{ $v }}

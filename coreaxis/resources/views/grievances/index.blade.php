@@ -25,8 +25,8 @@
         <td>{{ $g->customer?->name ?? '—' }}</td>
         <td class="fw-semibold" style="max-width:200px">{{ Str::limit($g->subject,40) }}</td>
         <td><span class="badge bg-secondary">{{ ucfirst($g->category) }}</span></td>
-        <td>@php $pc=['low'=>'success','medium'=>'warning','high'=>'orange','urgent'=>'danger'][$g->priority]??'secondary' @endphp
-            <span class="badge bg-{{ $g->priority==='high'?'warning':''.($g->priority==='urgent'?'danger':'success') }}" style="{{ $g->priority==='high'?'background:#fd7e14!important':'' }}">{{ ucfirst($g->priority) }}</span></td>
+        <td>@php $pc=['low'=>'success','medium'=>'warning','high'=>'warning text-dark','urgent'=>'danger'][$g->priority]??'secondary' @endphp
+            <span class="badge bg-{{ $pc }}">{{ ucfirst($g->priority) }}</span></td>
         <td class="small {{ $g->sla_due_date && $g->sla_due_date->isPast() && $g->status!=='resolved' ? 'text-danger fw-bold' : 'text-muted' }}">
             {{ $g->sla_due_date?->format('d M Y') ?? '—' }}
         </td>
