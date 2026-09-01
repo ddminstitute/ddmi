@@ -13,11 +13,9 @@ class Cheque extends Model
     protected $casts = ['amount' => 'decimal:2','cheque_date' => 'date','deposit_date' => 'date','clearing_date' => 'date'];
     public function account() { return $this->belongsTo(Account::class); }
     public function createdBy() { return $this->belongsTo(User::class, 'created_by'); }
-
     public function getStatusBadge(): string {
         return match($this->status) {
-            'pending' => 'warning','cleared' => 'success',
-            'bounced' => 'danger','cancelled' => 'secondary', default => 'secondary',
+            'pending' => 'warning','cleared' => 'success','bounced' => 'danger','cancelled' => 'secondary', default => 'secondary',
         };
     }
 }

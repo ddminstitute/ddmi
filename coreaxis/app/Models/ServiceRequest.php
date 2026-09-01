@@ -14,7 +14,6 @@ class ServiceRequest extends Model
     public function account() { return $this->belongsTo(Account::class); }
     public function requestedBy() { return $this->belongsTo(User::class, 'requested_by'); }
     public function processedBy() { return $this->belongsTo(User::class, 'processed_by'); }
-
     public static function generateNumber(): string {
         do { $n = 'SR'.date('Ym').str_pad(random_int(0,9999),4,'0',STR_PAD_LEFT); }
         while (static::where('request_number',$n)->exists());

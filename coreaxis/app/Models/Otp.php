@@ -14,7 +14,6 @@ class Otp extends Model
     public static function generate(int $userId, string $purpose = 'transaction'): string
     {
         static::where('user_id', $userId)->where('purpose', $purpose)->update(['used' => true]);
-
         $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
         static::create([
             'user_id'    => $userId,
@@ -34,11 +33,7 @@ class Otp extends Model
             ->where('used', false)
             ->where('expires_at', '>', now())
             ->first();
-
-        if ($otp) {
-            $otp->update(['used' => true]);
-            return true;
-        }
+        if ($otp) { $otp->update(['used' => true]); return true; }
         return false;
     }
 }

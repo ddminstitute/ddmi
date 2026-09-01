@@ -15,4 +15,3 @@ class EmiSchedule extends Model {
         return match($this->status) { 'paid'=>'success','pending'=>'warning','partial'=>'info','overdue'=>'danger', default=>'secondary' };
     }
 }
-// relationship added by gap implementation

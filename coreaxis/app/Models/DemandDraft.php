@@ -13,7 +13,6 @@ class DemandDraft extends Model
     protected $casts = ['amount' => 'decimal:2','charges' => 'decimal:2','total_debited' => 'decimal:2','issue_date' => 'date','valid_until' => 'date','cancelled_at' => 'datetime'];
     public function account() { return $this->belongsTo(Account::class); }
     public function createdBy() { return $this->belongsTo(User::class, 'created_by'); }
-
     public static function generateDdNumber(): string {
         do { $n = 'DD'.date('Ymd').str_pad(random_int(0,9999),4,'0',STR_PAD_LEFT); }
         while (static::where('dd_number',$n)->exists());

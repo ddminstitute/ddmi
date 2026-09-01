@@ -12,46 +12,31 @@ class FixedDeposit extends Model
         'matured_at','closed_at','closure_reason','notes','created_by',
     ];
     protected $casts = [
-        'start_date' => 'date', 'maturity_date' => 'date',
-        'principal_amount' => 'decimal:2', 'maturity_amount' => 'decimal:2',
-        'interest_earned' => 'decimal:2', 'interest_rate' => 'decimal:2',
+        'start_date' => 'date','maturity_date' => 'date',
+        'principal_amount' => 'decimal:2','maturity_amount' => 'decimal:2',
+        'interest_earned' => 'decimal:2','interest_rate' => 'decimal:2',
         'auto_renew' => 'boolean',
     ];
-
     public function account() { return $this->belongsTo(Account::class); }
     public function customer() { return $this->belongsTo(Customer::class); }
 
-    public static function generateFdNumber(): string
-    {
+    public static function generateFdNumber(): string {
         do { $n = 'FD'.date('Y').str_pad(random_int(0,99999),5,'0',STR_PAD_LEFT); }
         while (static::where('fd_number',$n)->exists());
         return $n;
     }
 
-    public static function calculateMaturity(float $principal, float $rate, int $months, string $compounding): float
-    {
+    public static function calculateMaturity(float $principal, float $rate, int $months, string $compounding): float {
         $n = match($compounding) {
-            'monthly'      => 12,
-            'quarterly'    => 4,
-            'half_yearly'  => 2,
-            'yearly'       => 1,
-            'on_maturity'  => 1,
-            default        => 4,
+            'monthly' => 12,'quarterly' => 4,'half_yearly' => 2,'yearly' => 1,'on_maturity' => 1, default => 4,
         };
-        if ($compounding === 'on_maturity') {
-            return round($principal * (1 + ($rate/100) * ($months/12)), 2);
-        }
+        if ($compounding === 'on_maturity') return round($principal * (1 + ($rate/100) * ($months/12)), 2);
         return round($principal * pow(1 + ($rate/100/$n), $n * $months/12), 2);
     }
 
-    public function getStatusBadge(): string
-    {
+    public function getStatusBadge(): string {
         return match($this->status) {
-            'active'           => 'success',
-            'matured'          => 'info',
-            'closed'           => 'secondary',
-            'premature_closed' => 'warning',
-            default            => 'secondary',
+            'active' => 'success','matured' => 'info','closed' => 'secondary','premature_closed' => 'warning', default => 'secondary',
         };
     }
 }

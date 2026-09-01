@@ -50,22 +50,16 @@ class Loan extends Model
     public function getStatusBadge(): string
     {
         return match($this->status) {
-            'pending' => 'warning',
-            'approved' => 'info',
-            'active' => 'success',
-            'rejected' => 'danger',
-            'closed' => 'secondary',
-            default => 'secondary',
+            'pending' => 'warning','approved' => 'info','active' => 'success',
+            'rejected' => 'danger','closed' => 'secondary', default => 'secondary',
         };
     }
 
     public function getTypeLabel(): string
     {
         return match($this->loan_type) {
-            'personal' => 'Personal Loan',
-            'home' => 'Home Loan',
-            'auto' => 'Auto Loan',
-            'business' => 'Business Loan',
+            'personal' => 'Personal Loan','home' => 'Home Loan',
+            'auto' => 'Auto Loan','business' => 'Business Loan',
             default => ucfirst($this->loan_type),
         };
     }

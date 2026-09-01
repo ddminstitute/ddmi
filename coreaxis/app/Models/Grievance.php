@@ -14,7 +14,6 @@ class Grievance extends Model
     public function account() { return $this->belongsTo(Account::class); }
     public function reportedBy() { return $this->belongsTo(User::class, 'reported_by'); }
     public function assignedTo() { return $this->belongsTo(User::class, 'assigned_to'); }
-
     public static function generateTicket(): string {
         do { $n = 'GRV'.date('Ym').str_pad(random_int(0,9999),4,'0',STR_PAD_LEFT); }
         while (static::where('ticket_number',$n)->exists());
@@ -22,8 +21,7 @@ class Grievance extends Model
     }
     public function getStatusBadge(): string {
         return match($this->status) {
-            'open' => 'danger','in_progress' => 'warning','resolved' => 'success',
-            'closed' => 'secondary','escalated' => 'dark', default => 'secondary',
+            'open' => 'danger','in_progress' => 'warning','resolved' => 'success','closed' => 'secondary','escalated' => 'dark', default => 'secondary',
         };
     }
 }
