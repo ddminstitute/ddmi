@@ -3,9 +3,17 @@
 @section('content')
 <div class="d-flex align-items-center mb-3 gap-2">
     <a href="{{ route('loans.index') }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
-    <h5 class="mb-0 fw-bold">Loan — {{ $loan->loan_number }}</h5>
+    <h5 class="mb-0 fw-bold">Loan &mdash; {{ $loan->loan_number }}</h5>
     <span class="badge bg-{{ $loan->getStatusBadge() }} ms-2">{{ ucfirst($loan->status) }}</span>
-    <a href="{{ route('print.loan.certificate',$loan) }}" target="_blank" class="btn btn-sm btn-outline-secondary ms-auto"><i class="bi bi-printer me-1"></i>Print Certificate</a>
+    <div class="ms-auto d-flex gap-2 flex-wrap">
+        <a href="{{ route('loans.guarantors',$loan) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-people me-1"></i>Guarantors</a>
+        <a href="{{ route('loans.collaterals',$loan) }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-shield me-1"></i>Collaterals</a>
+        @if($loan->status==='active')
+        <a href="{{ route('loans.foreclosure',$loan) }}" class="btn btn-sm btn-outline-warning"><i class="bi bi-x-circle me-1"></i>Foreclose</a>
+        <a href="{{ route('loans.restructure',$loan) }}" class="btn btn-sm btn-outline-info"><i class="bi bi-arrow-repeat me-1"></i>Restructure</a>
+        @endif
+        <a href="{{ route('print.loan.certificate',$loan) }}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-printer me-1"></i>Print Certificate</a>
+    </div>
 </div>
 <div class="row g-3 mb-4">
     <div class="col-md-8">
@@ -31,15 +39,9 @@
                 <div class="small opacity-75 mb-1">Outstanding Balance</div>
                 <div class="display-6 fw-bold">₹{{ number_format($loan->outstanding_amount,2) }}</div>
                 <hr class="border-white opacity-25">
-                <div class="d-flex justify-content-between small">
-                    <span>Principal: ₹{{ number_format($loan->principal_amount,2) }}</span>
-                </div>
-                <div class="d-flex justify-content-between small">
-                    <span>Monthly EMI: ₹{{ number_format($loan->monthly_emi,2) }}</span>
-                </div>
-                <div class="d-flex justify-content-between small">
-                    <span>Total Paid: ₹{{ number_format($loan->paid_amount,2) }}</span>
-                </div>
+                <div class="d-flex justify-content-between small"><span>Principal: ₹{{ number_format($loan->principal_amount,2) }}</span></div>
+                <div class="d-flex justify-content-between small"><span>Monthly EMI: ₹{{ number_format($loan->monthly_emi,2) }}</span></div>
+                <div class="d-flex justify-content-between small"><span>Total Paid: ₹{{ number_format($loan->paid_amount,2) }}</span></div>
             </div>
         </div>
         @if($loan->status==='pending')

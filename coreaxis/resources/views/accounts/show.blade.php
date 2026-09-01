@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex align-items-center mb-3 gap-2">
     <a href="{{ route('accounts.index') }}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left"></i></a>
-    <h5 class="mb-0 fw-bold">Account — {{ $account->account_number }}</h5>
+    <h5 class="mb-0 fw-bold">Account &mdash; {{ $account->account_number }}</h5>
     <div class="ms-auto d-flex gap-2">
         <a href="{{ route('print.passbook',$account) }}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-book me-1"></i>Passbook</a>
         <a href="{{ route('print.statement',$account) }}" target="_blank" class="btn btn-sm btn-outline-secondary"><i class="bi bi-file-earmark-text me-1"></i>Statement</a>
